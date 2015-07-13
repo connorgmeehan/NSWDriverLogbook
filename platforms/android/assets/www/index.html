@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!--
+    uName = input box for the username
+    regusername = input box for registering username
+    $username = variable storing username on the client side
+    dbusername = column in users in SQL database
+-->
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" id="viewport"
+  content="width=device-width, height=device-height,
+  initial-scale=1.0, maximum-scale=1.0,
+  user-scalable=no;" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, tardensitydpi=device-dpi" />-->
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDD353fOPh-KBUQ-2ekPCg75uxXRn0D9Tk&sensor=false"></script>-->
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Driver Logbook NSW</title>
+</head>
+<body>
+
+    <div class="app" data-role="page" id="loginPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <h2>Driver Logbook NSW</h1>
+            <div data-role="navbar">
+            <ul>
+                <li><a href="#loginPage" data-role="button"><h3>Login</h3></a></li>
+                <li><a href="#registerPage" data-role="button"><h3>Register</h3></a></li>
+                <li><a href="#forgotPage" data-role="button"><h3>Forgot</h3></a></li>
+            </ul>
+            </div>
+        </div>
+    
+        <div data-role="content" class="content" id="content">
+            <form id="loginField">
+                <input type="text" id="email" placeholder="Email address:" name="username" data-enhance="true">
+                <input type="password" id="password" placeholder="Password" name="password">
+                <div class="centerButtonContainer"><a class="button" id="login">Login</a></div>
+            </form>
+            <div data-role="popup" id="popupdiv" class="ui-content">
+            	<div id="Header"><h4>Error</h4></div>
+            	<a href="#" data-rel="back" data-role="button" data-icon="delete" class="ui-btn-right">X</a>
+                <p>Popup Message Test</p>
+            </div>
+        </div>
+    
+        <div data-role="footer" data-position="fixed">
+        </div> <!--Login Page-->
+    </div>
+    
+    <div class="app" data-role="page" id="registerPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <h2>Driver Logbook NSW</h1>
+    
+            <div data-role="navbar">
+            <ul>
+                <li><a href="#loginPage" data-role="button"><h3>Login</h3></a></li>
+                <li><a href="#registerPage" data-role="button"><h3>Register</h3></a></li>
+                <li><a href="#forgotPage" data-role="button"><h3>Forgot</h3></a></li>
+            </ul>
+            </div>
+        </div>
+    
+        <div data-role="content" class="content" id="content">
+                <form id="registerField">
+                    <input type="text" id="nEmail" placeholder="Email">
+                    <input type="text" id="nfName" placeholder="Full Name">
+                    <input type="text" id="nLNo" placeholder="License No.">
+                    <input type="text" id="nPass" placeholder="Password" >
+                    <div class="centerButtonContainer"><a class="button" id="register">Register</a></div>
+                </form>
+        </div>
+    
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+    
+    <div class="app" data-role="page" id="forgotPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <h2>Driver Logbook NSW</h1>
+    
+            <div data-role="navbar">
+            <ul>
+                <li><a href="#loginPage" data-role="button"><h3>Login</h3></a></li>
+                <li><a href="#registerPage" data-role="button"><h3>Register</h3></a></li>
+                <li><a href="#forgotPage" data-role="button"><h3>Forgot</h3></a></li>
+            </ul>
+            </div>
+        </div>
+    
+        <div data-role="content" class="content" id="content">
+            <div></div>
+        </div>
+    
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+    
+    <!--Beyond the  Login-->
+
+    <div class="app" data-role="page" id="bastionPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <h2>Driver Logbook NSW</h1><div id="refreshBasicData" class="refresh_button"></div>
+            <div data-role="navbar"></div>
+        </div>
+        <div data-role="content" class="content">
+                <div class="menuContainer">
+                    <div id="hourDisp"><p id="hourText">Loading Hours</p></div>
+                    <div class="centerButtonContainer"><a href="#newTripPage" id="tripPageButton" class="bigbutton">Start Trip</a></div>
+                    <div class="centerButtonContainer"><a href="#pastTripsPage" id="getTripPage" class="bigbutton">Past Trips</a></div>
+                    <div class="inlineButtonContainer" style="float:left"><a class="button" id="profilesPageButton" href="#profilesPage"><h3>Profiles</h3></a></div>
+                    <div class="inlineButtonContainer" style="float:right"><a class="button" id="vehiclesPageButton" href="#vehiclesPage"><h3>Vehicles</h3></a></div>
+                </div>
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div class="app" data-role="page" id="vehiclesPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <a href="#bastionPage" class="backarrowContainer"><div class="backarrow"></div></a>
+            <h2>Vehicles</h2><div id="refreshVehicles" class="refresh_button"></div>
+        </div>
+        <div data-role="content" class="content">
+        <div id="vehiclePageContainer"></div>
+            <div id="newVehiclePopup" class="popup">
+                <br>
+                <h2> Add a New Vehicle</h2>
+                <input type="text" id="newVehicleName" placeholder="A name for the new vehicle">
+                <input type="text" id="newVehicleNumberplate" placeholder="The vehicle's license plate">
+                <button type="button" class="button" id="saveNewVehicle"></button>
+            </div>
+            <div id="newVehicle" class="new" href="#newVehiclePopup">+</div>
+        </div>
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div class="app" data-role="page" id="profilesPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <a href="#bastionPage"><div class="backarrow"></div></a>
+            <h2>Profiles</h2>
+        </div>
+        <div data-role="content" class="content">
+        <div id="profilePageContainer"></div>
+            <div id="newProfilePopup" class="popup">
+                <br>
+                <h2>Add a New Assistant Driver</h2><br>
+                <input type="text" id="newAssiDriverName" placeholder="Assistant Driver's Name">
+                <input type="text" id="newAssiDriverId" placeholder="Assistant Driver's Driver License Id">  
+                <button type="button" class="button" id="saveNewDriver">Ok</button>                 
+            </div>
+            <div id="newProfile" class="new">+</div>
+        </div>
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div class="app" data-role="page" id="newTripPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <a href="#bastionPage" class="backarrow" data-role="none"></a>
+            <h2>New Trip</h2>
+        </div>
+        <div data-role="content" class="content" id="tripPageContainer">
+            <h3>What's the Odometer?</h3>
+            <input type="text" id="odoStart" placeholder="Odometer Start">
+            <h3>Who's driving?</h3>
+            <select id="selectDriver" data-role="none" ></select>
+            <h3>What are you Driving?</h3>
+            <select id="selectVehicle" data-role="none" ></select>
+            <div class="centerButtonContainer"><a class="button" id="beginTrip">Begin Trip</a></div>
+        </div>
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div class="app" data-role="page" id="progressTripPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <a id="cancelTrip" href="#bastionPage" class="backarrowContainer"><div class="backarrow" class="ui-btn-left"></div></a>
+            <h2>Trip in Progress</h2>
+        </div>
+        <div data-role="content" class="content">
+            <div class="menuContainer">
+                <h2 id="tripTime">0hrs 0m 0s</h2>
+                <p id="tripInfo"></p>
+                <div class="centerButtonContainer" id="endTrip"><a id="finalizeTripButton" class="bigbutton">Finalize Trip</a></div>
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div class="app" data-role="page" id="finalizeTripPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <a href="#progressTripPage" class="backarrowContainer"><div class="backarrow" class="ui-btn-left"></div></a>
+            <h2>Finalize Trip</h2>
+        </div>
+        <div data-role="content" class="content">
+            <div class="menuContainer">
+                <h2 id="tripTime2"></h2>
+                <p id="tripInfo2"></p>
+                <div class="centerButtonContainer" id="endTrip"><a id="completeTripButton" class="bigbutton">Finish Trip</a></div>
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div class="app" data-role="page" id="pastTripsPage">
+        <div data-role="header" data-position="fixed" class="navbar">
+            <a href="#bastionPage" class="backarrowContainer"><div class="backarrow" class="ui-btn-left"></div></a>
+            <h2>Past Trips</h2>
+        </div>
+        <div data-role="content" class="content">
+            <div id="tripListContainer">
+                
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+</body>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+</html>
+    

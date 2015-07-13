@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, tardensitydpi=device-dpi" />-->
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDD353fOPh-KBUQ-2ekPCg75uxXRn0D9Tk&sensor=false"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.1.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Driver Logbook NSW</title>
+</head>
+<body>
+	<div class="app" data-role="page" id="bastionPage">
+		<div data-role="header" id="navbar">
+			<h1>Driver Logbook</h1>
+			<div data-role="navbar">
+        		<ul>
+        		    <li><a data-role="button"></a></li>
+        		</ul>
+        	</div>
+		</div>
+		<div data-role="content">
+			<div id="hourDisp"><p id="hourText">Loading Hours</p></div>
+			<a href="#newTripPage"><div class="bigmenubutton">Start Trip</div></a>
+			<a href="#profilesPage"><div class="menubutton" id="">Profiles</div></a>
+			<a href="#vehiclesPage"><div class="menubutton" id="">Vehicles</div></a>
+		</div>
+		<div data-role="footer">
+		</div>
+	</div>
+
+	<div class="app" data-role="page" id="newTripPage">
+		<div data-role="header" id="navbar">
+			<a href="#bastionPage"><div id="backarrow"></div></a>
+			<h3>New Trip</h3>
+		</div>
+		<div data-role="content">
+			<input type="text" id="odoStart" placeholder="Odometer Start">
+			<select id="selectDriver">
+				<option value="driver0">optionORdriver1</option>
+				<option value="driver1">optionORdriver2</option>
+			</select>
+			<select id="selectVehicle">
+				<option value="vehicle0">optionORvehicle1</option>
+				<option value="vehicle1">optionORvehicle2</option>
+			</select>
+			<div class="bigmenubutton" id="beginTrip">Begin Trip</div>
+		</div>
+		<div data-role="footer">
+		</div>
+	</div>
+
+	<div class="app" data-role"page" id="profilesPage">
+		<div data-role="header" id="navbar">
+			<a href="#bastionPage"><div id="backarrow"></div></a>
+			<h3>Profiles</h3>
+		</div>
+		<div data-role="content" id="content">
+		<div id="profilesDisplay"></div>
+			<input type="text" id="newAssiDriverName" placeholder="Assistant Driver's Name">
+			<input type="text" ud="newAssiDriverId" placeholder="Assistant Driver's Driver License Id">
+		</div>
+		<div data-role="footer">
+		</div>
+	</div>
+
+	<div class="app" data-role"page" id="vehiclesPage">
+		<div data-role="header" id="navbar">
+			<a href="#bastionPage"><div id="backarrow"></div></a>
+			<h3>Vehicles</h3>
+		</div>
+		<div data-role="content" id="content">
+			<input type="text" id="newVehicleName" placeholder="A name for the new vehicle">
+			<input type="text" ud="newVehicleNumberplate" placeholder="The vehicle's license plate">
+		</div>
+		<div data-role="footer">
+		</div>
+	</div>
+
+</body>
+    <script type="text/javascript" src="js/bastion.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+</html>
