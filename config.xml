@@ -2,10 +2,10 @@
 <widget id="com.atarplease.NSWDriverLogbook" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>com.atarplease.NSWDriverLogbook</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        An application to quickly record hours for your provisional license. 
     </description>
     <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+        C-Banger!
     </author>
     <content src="index.html" />
     <preference name="permissions" value="none" />
@@ -66,5 +66,6 @@
     <gap:splash gap:platform="ios" height="1024" src="www/res/screen/ios/screen-ipad-portrait.png" width="768" />
     <gap:splash gap:platform="ios" height="768" src="www/res/screen/ios/screen-ipad-landscape.png" width="1024" />
     <gap:splash gap:platform="winphone" src="www/res/screen/windows-phone/screen-portrait.jpg" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <access origin="*" />
 </widget>
