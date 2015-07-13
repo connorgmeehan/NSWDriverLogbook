@@ -125,6 +125,24 @@ input{
     box-shadow: 0px 3px 0px 0px rgba(1,100,100,1);
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
 }
+.popupCloseButton{
+    position:relative;
+    border-radius: 12px;
+    border-right: white 1px;
+    border-left: black 1px;
+    z-index: 2000;
+    cursor: pointer;
+    right:0px;
+    bottom:100%;
+    color:white;
+    margin: 17px 0 0 0;
+    padding:3px;
+    width:40px;
+    height:40px;
+    float:right !important;
+    text-align: center; !important;
+    margin-right: 30px !important;
+}
 .button:active {
     margin-top: 2px;
     box-shadow: 0px 1px 0px 0px rgba(1,100,100,1);
