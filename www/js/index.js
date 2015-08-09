@@ -1,25 +1,23 @@
 
-//Settings
-var roundto5 = true;                                        //Rounds minutes to five.
-var hosturl;     //I need to switch between webserver and local server
-var debug = false;                                           //Used to bypass some code that wont run (can't find location) when there is no intenet avaliable
-var tfhour = false;                                         //Twenty four hour = false
-var distributable = true;
+//Settings                                                      
+var hosturl;                                                    //I need to switch between webserver and local server
+var debug = false;                                              //Used to bypass some code that wont run (can't find location) when there is no intenet avaliable
+var tfhour = false;                                             //Twenty four hour = false
+var distributable = true;                                      //Switches between local server and liver server
 
 //Global Variables
 var tripInterval;
 var tripLength;
-var justtime;
 var timeStart;
 var timeFinish;
-var datetime;
+var timeStart;
 var totalTime;
 var currentLocation;
 var previousLocation;
 
 $( document ).bind( "mobileinit", function() {
     // Make your jQuery Mobile framework configuration changes here!
-    //$.support.cors = true;
+    $.support.cors = true;
     $.mobile.allowCrossDomainPages = true;
     //pageLayout();
 });
@@ -52,27 +50,21 @@ function displayTime(date){
     }
 }
 
-function errorMessage(error){
-	$("#popupdiv").html("<br><div id='h'><h4>Error Recieved</h4></div><br><p>"+error+"</p>");
-	$("#popupdiv").slideDown().delay(2000).slideUp();
-    console.log(error.formatted_address);
-}
-
 function getGeoLocation(){
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-        function onSuccess(position){
-            console.log(position.coords.longitude+", "+position.coords.latitude);
-            $.ajax({
-                url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+position.coords.latitude+","+position.coords.longitude,
-                dataType: 'json',
-                async: false,
-                success: function(data) {
-                    var locationArray =[data.results[1].formatted_address, position.coords.latitude+","+position.coords.longitude];
-                    console.dir(locationArray);
-                    currentLocation = locationArray;
-                }
-            });
-        }
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    function onSuccess(position){
+        console.log(position.coords.longitude+", "+position.coords.latitude);
+        $.ajax({
+            url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+position.coords.latitude+","+position.coords.longitude,
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+                var locationArray =[data.results[1].formatted_address, position.coords.latitude+","+position.coords.longitude];
+                console.dir(locationArray);
+                currentLocation = locationArray;
+            }
+        });
+    }
     function onError(error){
         console.log('ERROR FINDING LOCATION');
     }
@@ -80,53 +72,21 @@ function getGeoLocation(){
 
 
 $(document).ready(function () {
-        if(distributable){
-        hosturl = "http://25767225.99atarplease.com/functions.php";
+    if(distributable){
+        hosturl = "http://25767225.99atarplease.com/sdd/php/functions.php";
     } else {
         hosturl = "http://localhost/sdd/php/functions.php";
     }
 
-    $("#login").bind("tap", handleLogin);
-    $("#register").bind("tap",handleRegister);
-    $("#profilesPageButton").bind("tap", getProfiles);
-    $("#vehiclesPageButton").bind("tap",getVehicles);
-    $("#tripPageButton").bind("tap", function(){
-        getProfiles('trippage');
-        getVehicles('trippage');
-    });
-    $("#getTripPage").bind("tap", getTripPage);
-    $("#newVehicle").bind("tap", function(){
-        $('#newVehiclePopup').slideDown();
-
-    });
-    $("#newProfile").bind("tap", function(){
-        $('#newProfilePopup').slideDown();
-    });
-    $("#refreshVehicles").bind("tap", getVehicles('vehiclespage'));
-    $("#refreshBasicData").bind("tap", basicData);
-    $("#saveNewDriver").bind("tap",addProfile);
-    $("#saveNewVehicle").bind("tap",addVehicle);
-    $("#beginTrip").bind("tap",initTrip);
-    $("#finalizeTripButton").bind("tap",function(){
-        clearInterval(tripInterval);
-        finalizeTrip();
-        $.mobile.changePage('#finalizeTripPage');
-    });
-    $("#completeTripButton").bind("tap", completeTrip);
-    $(".cancelTrip").bind("tap", cancelTrip); 
-    window.localStorage.setItem("seshstring",""); 
     pageLayout(); 
 
-    $(document).on('touchstart', function (e) {
-        var container = $(".popup");
-        
-        if (!container.is(e.target) && container.has(e.target).length === 0){
-            container.slideUp();
-        }
-    });
+    bindButtons();
+    //$('#loadingmask').fadeOut(500, function(){ $(this).remove(); });
 });
 
-/*                                                                       EDIT DOM FUNCTIONS         */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                                      Page Constructors       */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function pageLayout(){
     //This is to fix some of the jQuery mobile styling paradigms.
@@ -142,72 +102,186 @@ function pageLayout(){
     });
 }
 
+function errorMessage(error){
+    $("#popupdiv").html("<br><div id='h'><h4>Error Recieved</h4></div><br><p>"+error+"</p>");
+    $("#popupdiv").slideDown().delay(3500).slideUp();
+    console.log('ERR:  '+error);
+}
 
-/*                                                                       TALK TO SERVER FUNCTIONS */
+function loading(binary){
+    if(binary == true){
+        $('#loadingmask').show();
+    }else{
+        $('#loadingmask').hide();
+    }
+}
+function bindButtons(){
+    $("#login").bind("tap", handleLogin);
+    $("#register").bind("tap",handleRegister);
+    $(".logout").bind("tap", logOut);
+    $("#profilesPageButton").bind("tap", function(){getProfiles('profilespage');});
+    $("#vehiclesPageButton").bind("tap",function(){getVehicles('vehiclespage');});
+    $("#tripPageButton").bind("tap", function(){
+        getProfiles('trippage');
+        getVehicles('trippage');
+    });
+    $("#getTripPage").bind("tap", getTripPage);
+    $("#newVehicle").bind("tap", function(){
+        $('#newVehiclePopup').slideDown();
+
+    });
+    $("#newProfile").bind("tap", function(){
+        $('#newProfilePopup').slideDown();
+    });
+    $("#refreshVehicles").bind("tap", function(){getVehicles('vehiclespage')});
+    $("#refreshgetTotalHours").bind("tap", getTotalHours);
+    $("#saveNewDriver").bind("tap",addProfile);
+    $("#saveNewVehicle").bind("tap",addVehicle);
+    $("#beginTrip").bind("tap",initTrip);
+    $("#finalizeTripButton").bind("tap",function(){
+        clearInterval(tripInterval);
+        finalizeTrip();
+        $.mobile.changePage('#finalizeTripPage');
+    });
+    $("#completeTripButton").bind("tap", completeTrip);
+    $(".cancelTrip").bind("tap", cancelTrip); 
+    window.localStorage.setItem("seshstring",""); 
+
+    //This makes the new profile popup close when you tap out of it.
+    $(document).on('touchstart', function (e) {
+        var container = $(".popup");
+        
+        if (!container.is(e.target) && container.has(e.target).length === 0){
+            container.slideUp();
+        }
+    });
+    loading(false);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                                      Auth functions          */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function handleLogin() {
     $("#submitButton").attr("disabled","disabled");
-    var u = $('#email').val();
-    var p = $('#password').val();
+    loading(true);
+    var email = $('#email').val();
+    var password = $('#password').val();
     
-
-    $.ajax({
+    if(email!==""||password!==""){
+        $.ajax({
             url: hosturl+"?action=login",
             data: {
-                email: u,
-                password: p,
+                email: email,
+                password: password,
             },
             type: 'POST',
             success: function(data){
                 if(data.length == 20){
+                    loading(false);
                     window.localStorage.setItem("seshstring", data);
                     console.log(window.localStorage.getItem("seshstring"));
                     $('#vehiclePageContainer').html("");
                     $("#profilePageContainer").html("");
-                    basicData();
+                    getTotalHours();
                     $.mobile.changePage('#bastionPage');
                 } else {
-                    errorMessage("Database Error: " + data);
+                    loading(false);
+                    errorMessage("Unkown error whie trying to login. <br> Contact me at *****@***.com and tell me what happened. I'll sort it out :D.");
                 }
             },error: function(data){
+                loading(false);
                 errorMessage("Error Connecting to Database: " + data);
             }
         });
+    } else {
+        loading(false);
+        errorMessage("You must not leave the login or password fields empty.");
+    }
 }
 
 function handleRegister() {
-    $("#registerSubmit").attr("disabled","disabled");
+    //$("#registerSubmit").attr("disabled","disabled");
     var newEmail = $("#nEmail").val();
-    var newName = 'cbanger';//$("nfName").val();
+    var newName = $("#nfName").val();
     var newId = $("#nLNo").val();
     var newPass = $("#nPass").val();
+    var repNewPass = $("#rNPass").val();
     
+    if(newEmail!==""&&newName!==""&&newId!==""&&newPass!==""){
+        if(newPass == repNewPass){
+            $.ajax({
+                url: hosturl+"?action=register",
+                data: {
+                    email: newEmail,
+                    password: newPass,
+                    drid: newId,
+                    fullname: newName,
+                },
+                type: 'POST',
+                success: function(data){
+                    if(data == 'success'){
+                        window.localStorage.setItem("seshstring", data);
+                        console.log(window.localStorage.getItem("seshstring"));
+                        $.mobile.changePage('#loginPage');
+                    }  else if(data == "duplicate_email") {
+                        errorMessage("The email you entered has already registered, please try an alternate. ");
+                    } else {
+                        errorMessage("Unkown error while trying to register. <br> Contact me at *****@***.com and tell me what happened. I'll sort it out :D.");
+                    }
+                },
+                error: function (request, textStatus, errorThrown) {
+                    errorMessage('Error connecting to database.'/* + request + textStatus+ errorThrown*/);
+                }
+            });
+        } else {
+            errorMessage("Passwords in both fields must match.");
+        }
+    } else {
+        errorMessage("You must not leave any field empty.");
+    }
+}
 
+function auth (data){
+    if(data != 'lo'){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function logOut(){
+    loading(true);
     $.ajax({
-        url: hosturl+"?action=register",
+        url: hosturl+"?action=logout",
         data: {
-            email: newEmail,
-            password: newPass,
-            drid: newId,
-            fullname: newName,
+            seshstring: window.localStorage.getItem("seshstring") ,
         },
         type: 'POST',
         success: function(data){
-            if(data.length == 20){
-                window.localStorage.setItem("seshstring", data);
-                console.log(window.localStorage.getItem("seshstring"));
-                basicData();
-                $.mobile.changePage('#bastionPage');
-            }
         },
         error: function(data){
-
+            console.log('error'+data);
         },
         dataType: 'json',
+    }).done(function(){
+        loading(false);
+        window.localStorage.setItem("seshstring", '');
+        $.mobile.changePage('#loginPage');
+        errorMessage('Successfully logged out');
+        $("#tripInfo2").html('');
+        $('#selectVehicle').html("");
+        $('#selectProfile').html("");   
+        $('#vehiclePageContainer').html("");
+        $('#profilePageContainer').html("");   
     });
-    basicData();
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                                      Get Data Requests       */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 function getVehicles(purpose){
+    loading(true);
     $.ajax({
         url: hosturl+"?action=getvehicles",
         data: {
@@ -215,26 +289,39 @@ function getVehicles(purpose){
         },
         type: 'POST',
         success: function(data){
+            loading(false);
             narray = data;
             if(purpose=="trippage"){
-                $('#selectVehicle').html("");                                // Clears the page so we dont get repeats
-                for(var e = 0; e < narray.length; e++) {
-                    $('#selectVehicle').append($('<option>', {
-                        value: e,
-                        text: narray[e].alias,
-                    }));
+                if(narray == null){
+                    errorMessage('You must add a vehicle at the vehicles page page.  <div class="logout href="#vehiclesPage">Ok</div>')
+                }else{
+                    $('#selectVehicle').html("");                                // Clears the page so we dont get repeats
+                    for(var e = 0; e < narray.length; e++) {
+                        $('#selectVehicle').append($('<option>', {
+                            value: e,
+                            text: narray[e].alias,
+                        }));
+                    }
                 }
-            } else if(purpose=="vehiclespage"){
-                $('#vehiclePageContainer').html("");                          // Clears the page so we dont get repeats
-                for (var i = 0; i < narray.length; i++) {
-                    template = "<div id='"+i+"'class='listObject'><h4>"+(i+1)+". "+narray[i].alias+"</h4><button class='popupCloseButton'>X</button><br><p>"+narray[i].licensenumber+"</p></div>";
-                    $('#vehiclePageContainer').append(template);
-                    console.log('array: '+narray);
+            } else {
+                if(narray == null){
+                    errorMessage("You havn't added a Vehicle to drive yet, please add one now.")
+                }else{
+                    $('#vehiclePageContainer').html("");                          // Clears the page so we dont get repeats
+                    for (var i = 0; i < narray.length; i++) {
+                        template = "<div id='"+i+"'class='listObject'><h4>"+(i+1)+". "+narray[i].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[i].licensenumber+"</p></div>";
+                        $('#vehiclePageContainer').append(template);
+                        console.log('array: '+narray);
+                    }
                 }
             }
         },
         error: function(data){
+            loading(false);
             console.log("error"+data);
+        },
+        complete: function(data){
+            loading(false);
         },
         dataType: 'json',
     });
@@ -242,6 +329,7 @@ function getVehicles(purpose){
 
 function getProfiles(purpose){
     var profileArray = [];
+    loading(true);
     $.ajax({
         url: hosturl+"?action=getprofiles",
         data: {
@@ -249,33 +337,102 @@ function getProfiles(purpose){
         },
         type: 'POST',
         success: function(data){
+            loading(false);
             narray = data;
             console.log('getProfiles Run');
             if(purpose=="trippage"){
-                console.log('trip page' + narray);
-                narray.forEach(function(el, ind){
-                    $('#selectDriver').append($('<option>', {
-                        value: ind,
-                        text: el.alias,
-                    }));
-                });
+                if(narray == null){
+                    errorMessage('You must add a profile at the profiles page page.  <div class="logout href="#profilesPage">Ok</div>')
+                } else {
+                    console.log('trip page' + narray);
+                    narray.forEach(function(el, ind){
+                        $('#selectDriver').append($('<option>', {
+                            value: ind,
+                            text: el.alias,
+                        }));
+                    });
+                }
             } else {
-                console.log('profilepage');
-                $('#profilePageContainer').html(""); // Clears the page
-                for (var o = 0; o < narray.length; o++) {
-                    template = "<div id='"+o+"'class='listObject'><h4>"+(o+1)+". "+narray[o].alias+"</h4><button class='popupCloseButton'>X</button><br><p>"+narray[o].licensenumber+"</p></div>";
-                    $('#profilePageContainer').append(template);
-                    console.log(narray.alias);
+                if(narray == null){
+                    errorMessage("You havn't added a Supervisory et, please add one now.");
+                } else {
+                    console.log('profilepage');
+                    $('#profilePageContainer').html(""); // Clears the page
+                    for (var o = 0; o < narray.length; o++) {
+                        template = "<div id='"+o+"'class='listObject'><h4>"+(o+1)+". "+narray[o].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[o].licensenumber+"</p></div>";
+                        $('#profilePageContainer').append(template);
+                        console.log(narray.alias);
+                    }
                 }   
             }
+        
         },
         error: function(data){
+            loading(false);
             console.log("error"+data + profileArray);
+        },
+        complete: function(data){
+            loading(false);
         },
         dataType: 'json',
     });
 }
 
+function getTripPage(){
+    loading(true);
+    $.ajax({
+        url: hosturl+"?action=gettrips",
+        dataType: 'JSON',
+        data: {
+            seshstring: window.localStorage.getItem("seshstring") ,
+        },
+        type: 'POST',
+        success: function(data){
+            loading(false);
+            console.log(data);
+            var narray = data;
+            $('#tripListContainer').html(''); // Clears the page so we dont get repeats
+            for(var e = 0; e < narray.length; e++) {
+                narray[e].dbtimestart = narray[e].dbtimestart.slice(11, 19);
+                narray[e].dbtimefinish = narray[e].dbtimefinish.slice(11, 19);
+                $('#tripListContainer').append('<div class="listObject" id='+e+1+'><h4>'+msToTime(narray[e].dbtotaltime)+
+                    '</h4><h6>'+narray[e].dbtimestart+' - '+narray[e].dbtimefinish+
+                    '</h6><h5>'+narray[e].dblocstart[0]+' - '+narray[e].dblocfinish[0]+'</h5></div>');
+            }
+        },
+        error: function(data){
+            loading(false);
+            console.log('Error Connecting to server');
+        },
+        complete: function(data){
+            loading(false);
+        },
+    });
+}
+
+function getTotalHours(){
+    $.ajax({
+        url: hosturl+"?action=gettotalhours",
+        data: {
+            seshstring: window.localStorage.getItem("seshstring") ,
+        },
+        type: 'POST',
+        success: function(data){
+            if(data===null){
+                $('#hourText').text('0hrs 0mins');
+            } else {
+                $('#hourText').text(msToTime(data,'hm'));
+            }
+        },
+        error: function(data){
+            console.log('error'+data);
+        },
+        dataType: 'json',
+    });
+}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                                      Add Data Requests       */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function addVehicle(name, licenseno){
     $.ajax({
         url: hosturl+"?action=newvehicle",
@@ -286,24 +443,7 @@ function addVehicle(name, licenseno){
         },
         type: 'POST',
         success: function(data){
-            narray = data;
-             if(purpose=="trippage"){
-                console.log('trip page' + narray);
-                narray.forEach(function(el, ind){
-                    $('#selectVehicle').append($('<option>', {
-                        value: ind,
-                        text: el.alias,
-                    }));
-                });
-            } else {
-                console.log('vehiclepage');
-                $('#vehiclePageContainer').html(""); // Clears the page
-                for (var o = 0; o < narray.length; o++) {
-                    template = "<div id='"+o+"'class='listObject'><h4>"+(o+1)+". "+narray[o].alias+"</h4><br><p>"+narray[o].licensenumber+"</p></div>";
-                    $('#vehiclePageContainer').append(template);
-                    console.log(narray.alias);
-                }   
-            }
+            getVehicles();
         },
         error: function(data){
             console.log('alias: '+ $("#newVehicleName").val()+ 'licensenumber'+ $("#newVehicleNumberplate").val());
@@ -322,8 +462,7 @@ function addProfile(name, licenseno){
         },
         type: 'POST',
         success: function(data){
-            var narray = getProfiles();
-            populateList('profiles', narray);
+            getProfiles();
         },
         error: function(data){
             console.log('error'+data);
@@ -331,52 +470,57 @@ function addProfile(name, licenseno){
         dataType: 'json',
     });
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                               Begin and Finish Trips         */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function initTrip(){
     function tripLoop(){
-        tripLength = new Date()-datetime;
+        tripLength = new Date()-timeStart;
         $("#tripTime").html(msToTime(tripLength));
     }
-
+    loading(true);
     //Validation Variables
     //console.log('Initiating trip');
     var chars = /^[0-9]+$/;
     var odoStart = $("#odoStart").val();
+    console.log(odoStart , odoStart.length);
+    odoStart = odoStart.split(',').join('');
+    console.log(odoStart , odoStart.length);
     var supervisor = $("#selectDriver").find("option:selected").text();
     var vehicleUsed = $("#selectVehicle").find("option:selected").text();
     currentLocation = getGeoLocation();
-    datetime = new Date();
-    //console.log("Initiating date time: " + datetime);
-    waitForGeoLocationInit();
-    function waitForGeoLocationInit(){
-        if(currentLocation === undefined){
-            setTimeout( waitForGeoLocationInit,1500);
-            console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s');
-            currentLocation = getGeoLocation();
-        } else {
-            console.debug(currentLocation);
-            odoStart.toString();
-            if(odoValid(odoStart)){
-                //console.log(odoStart, supervisor, vehicleUsed, datetime, "position: ", currentLocation);
-                console.log('Saving required info to localwindow.localStorage, also trying to change page.');
-                window.localStorage.setItem("newTripODO", odoStart); //saves odoStart as newTripODO
-                window.localStorage.setItem("newTripS", supervisor);
-                window.localStorage.setItem("newTripV", vehicleUsed );
-                window.localStorage.setItem("newTripT", datetime);
-                window.localStorage.setItem("newGeoLoc", JSON.stringify(currentLocation));
-                $.mobile.changePage('#progressTripPage');
-                $("#tripInfo").html("Odometer at Start: "+odoStart+"<br><br>Supervisor: "+ supervisor + "<br><br>Vehicle Used: "+vehicleUsed+"<br><br>");
-                tripInterval = setInterval(tripLoop, 1000);//1 second
+    timeStart = new Date();
+    //console.log("Initiating date time: " + timeStart);
+    if(odoStart.indexOf('.') != -1){
+        errorMessage('There was a "." in the odometer field somewhere which we cannot use.  Please remove it.');
+    }else{
+        if(odoStart.length < 11 && odoStart.length > 0  && parseInt(odoStart) > 0 && typeof(parseInt(odoStart))=='number'){
+            waitForGeoLocationInit();
+                function waitForGeoLocationInit(){
+                    if(currentLocation === undefined){
+                        setTimeout( waitForGeoLocationInit,1500);
+                        console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s');
+                        currentLocation = getGeoLocation();
+                    } else {
+                        loading(false);
+                        console.debug(currentLocation);
+                        //console.log(odoStart, supervisor, vehicleUsed, timeStart, "position: ", currentLocation);
+                        console.log('Saving required info to localwindow.localStorage, also trying to change page.');
+                        window.localStorage.setItem("newTripODO", odoStart); //saves odoStart as newTripODO
+                        window.localStorage.setItem("newTripS", supervisor);
+                        window.localStorage.setItem("newTripV", vehicleUsed );
+                        window.localStorage.setItem("newTripT", timeStart);
+                        window.localStorage.setItem("newGeoLoc", JSON.stringify(currentLocation));
+                        $.mobile.changePage('#progressTripPage');
+                        $("#tripInfo").html("Odometer at Start: "+odoStart+"<br><br>Supervisor: "+ supervisor + "<br><br>Vehicle Used: "+vehicleUsed+"<br><br>");
+                        tripInterval = setInterval(tripLoop, 1000);//1 second
+                    }
+                }
             } else {
-                alert("The Odometer Start field needs to have eight characters and must be only numbers.");
+                errorMessage('You must enter a value for the Odometer, it can be up to 11 characters.');
+                loading(false);
             }
-        }
-    }
-}
-function odoValid(odoValue){
-    if(odoValue.length <= 8){
-        return true;
-    } else {
-        return false;
     }
 }
 function cancelTrip(){
@@ -395,12 +539,14 @@ function finalizeTrip(){
         waitForGeoLocationFinalize();
     }
     console.log('TOTAL TIME: '+totalTime);
+    loading(true);
     function waitForGeoLocationFinalize(){
         if(currentLocation === undefined){
             setTimeout( waitForGeoLocationFinalize,1500);
             console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s');
             currentLocation = getGeoLocation();
         } else {
+            loading(false);
             console.debug(currentLocation);
             $("#tripInfo2").html(
                             "Odometer at Start: " + window.localStorage.getItem("newTripODO") +
@@ -420,92 +566,62 @@ function finalizeTrip(){
 function completeTrip(){
     odoStart = window.localStorage.getItem("newTripODO");
     odoFinish = $("#odoFinish").val();
-    assistantDriver = window.localStorage.getItem('newTripS');
-    vehicleUsed = window.localStorage.getItem("newTripV");
-    console.log(odoStart+odoFinish+timeStart+timeFinish+assistantDriver+vehicleUsed+previousLocation+currentLocation);
-    $("#bastionPage").append('<div id="completedDisplay"><h2>Total Time: ' + msToTime(totalTime,'hm') + '</h2>' +
-                             '<p><b>Distance: </b>'+odoStart+'km - '+odoFinish+'km</p><br>'+
-                             '<p><b>Time: </b>'+displayTime(timeStart)+'-'+displayTime(timeFinish)+'</p><br>'+
-                             '<p><b>Supervisor: </b>'+window.localStorage.getItem('newTripS')+'</p><br>'+
-                             '<p><b>Vehicle: </b>'+window.localStorage.getItem('newTripV')+'</p><br>'+
-                             '<p><b>From: '+previousLocation[0]+'<br>  To: '+currentLocation[0]+'</p></b></div>');
-    $.mobile.changePage('#bastionPage');
-    $("#bastionPage").append('<div id="letter"></div>');
-    $("#letter").append('<div id="flap"></div>').css({display: 'block'}).delay(7500).animate({left: 1000}, 1000).delay(1000).queue(function() { $(this).remove(); });
-    $("#completedDisplay").css({display: 'block'}).delay(7000).toggle('fold').queue(function() { $(this).remove(); });
-    $("#odoStart").val("");
-    
-
-    timeStart = timeStart.toISOString().slice(0, 19).replace('T', ' ');
-    timeFinish = timeFinish.toISOString().slice(0, 19).replace('T', ' ');
-
-    $.ajax({
-        url: hosturl+'?action=newtrip',
-        type: 'POST',
-        dataType: 'JSON',
-        data: { seshstring: window.localStorage.getItem("seshstring"),
-                dbodometerstart: odoStart,
-                dbodometerfinish: odoFinish,
-                dbtimestart: timeStart,
-                dbtimefinish: timeFinish,
-                dbsupervisor: assistantDriver,
-                dbvehicle: vehicleUsed,
-                dblocstart: JSON.stringify(previousLocation),
-                dblocfinish: JSON.stringify(currentLocation),
-                dbtriplength: totalTime},
-    })
-    .done(function() {
-        console.log("Successfully added trip");
-    })
-    .fail(function() {
-        console.log("error");
-    });
-    basicData();
-}
-
-function getTripPage(){
-    $.ajax({
-        url: hosturl+"?action=gettrips",
-        dataType: 'JSON',
-        data: {
-            seshstring: window.localStorage.getItem("seshstring") ,
-        },
-        type: 'POST',
-        success: function(data){
-            console.log(data);
-            var narray = data;
-                                 // Clears the page so we dont get repeats
-            for(var e = 0; e < narray.length; e++) {
-                narray[e].dbtimestart = narray[e].dbtimestart.slice(11, 19);
-                narray[e].dbtimefinish = narray[e].dbtimefinish.slice(11, 19);
-                $('#tripListContainer').append('<div class="listObject" id='+e+1+'><h3>'+msToTime(narray[e].dbtotaltime)+
-                    '</h3><h6>'+narray[e].dbtimestart+' - '+narray[e].dbtimefinish+
-                    '</h6><h5>'+narray[e].dblocstart[0]+' - '+narray[e].dblocfinish[0]+'</h5></div>');
-            }
-        },
-        error: function(data){
-            console.log('Error Connecting to server');
-        },
-    });
-}
-
-function basicData(){
-    $.ajax({
-        url: hosturl+"?action=basicdata",
-        data: {
-            seshstring: window.localStorage.getItem("seshstring") ,
-        },
-        type: 'POST',
-        success: function(data){
-            if(data===null){
-                $('#hourText').text('0hrs 0mins');
+    odoStart = odoStart.split(',').join('');
+    if(odoFinish.indexOf('.') != -1){
+        errorMessage('There was a "." in the odometer field somewhere which we can not use.  Please remove it.');
+    }
+    else{
+        if(parseInt(odoFinish) <= parseInt(odoStart)){
+            errorMessage('The odometer at the end of the trip must be greater than the odometer at the start of the trip.');
+        } else{
+            if(odoFinish.length < 11 && odoFinish.length > 0 && typeof(parseInt(odoFinish))=='number'){
+                loading(true);
+                assistantDriver = window.localStorage.getItem('newTripS');
+                vehicleUsed = window.localStorage.getItem("newTripV");
+                console.log(odoStart+odoFinish+timeStart+timeFinish+assistantDriver+vehicleUsed+previousLocation+currentLocation);
+                $("#bastionPage").append('<div id="completedDisplay"><h2>Total Time: ' + msToTime(totalTime,'hm') + '</h2>' +
+                                         '<p><b>Distance: </b>'+odoStart+'km - '+odoFinish+'km</p><br>'+
+                                         '<p><b>Time: </b>'+displayTime(timeStart)+'-'+displayTime(timeFinish)+'</p><br>'+
+                                         '<p><b>Supervisor: </b>'+window.localStorage.getItem('newTripS')+'</p><br>'+
+                                         '<p><b>Vehicle: </b>'+window.localStorage.getItem('newTripV')+'</p><br>'+
+                                         '<p><b>From: '+previousLocation[0]+'<br>  To: '+currentLocation[0]+'</p></b></div>');
+                $.mobile.changePage('#bastionPage');
+                $("#bastionPage").append('<div id="letter"></div>');
+                $("#letter").append('<div id="flap"></div>').css({display: 'block'}).delay(7500).animate({left: 1000}, 1000).delay(1000).queue(function() { $(this).remove(); });
+                $("#completedDisplay").css({display: 'block'}).delay(7000).toggle('fold').queue(function() { $(this).remove(); });
+                $("#odoStart").val("");
+                
+            
+                timeStart = timeStart.toISOString().slice(0, 19).replace('T', ' ');
+                timeFinish = timeFinish.toISOString().slice(0, 19).replace('T', ' ');
+            
+                $.ajax({
+                    url: hosturl+'?action=newtrip',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: { seshstring: window.localStorage.getItem("seshstring"),
+                            dbodometerstart: odoStart,
+                            dbodometerfinish: odoFinish,
+                            dbtimestart: timeStart,
+                            dbtimefinish: timeFinish,
+                            dbsupervisor: assistantDriver,
+                            dbvehicle: vehicleUsed,
+                            dblocstart: JSON.stringify(previousLocation),
+                            dblocfinish: JSON.stringify(currentLocation),
+                            dbtriplength: totalTime},
+                })
+                .done(function() {
+                    console.log("Successfully added trip");
+                    loading(false);
+                })
+                .fail(function() {
+                    console.log("error");
+                });
             } else {
-                $('#hourText').text(msToTime(data,'hm'));
+                errorMessage('You must enter a value for the Odometer, it can be up to 11 characters.');
+                loading(false);
             }
-        },
-        error: function(data){
-            console.log('error'+data);
-        },
-        dataType: 'json',
-    });
+            getTotalHours();
+        }
+    }
 }
