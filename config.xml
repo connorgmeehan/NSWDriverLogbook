@@ -26,6 +26,7 @@
     <gap:plugin name="org.apache.cordova.battery-status" />
     <!--<gap:plugin name="org.apache.cordova.camera" />-->
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
     <icon src="icon.png" />
     <icon gap:platform="android" gap:qualifier="ldpi" src="www/res/icon/android/icon-36-ldpi.png" />
     <icon gap:platform="android" gap:qualifier="mdpi" src="www/res/icon/android/icon-48-mdpi.png" />
