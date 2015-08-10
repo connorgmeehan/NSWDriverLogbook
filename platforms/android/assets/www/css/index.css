@@ -28,18 +28,24 @@ body, html {
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
 }
 h1{
-    font-size:40px;
+    font-size:30px;
     margin-bottom:20px;
 }
 h3{
-    font-size:20px;
+    font-size:15px;
     font-style:normal;
     color: white;
+    margin:0.5em;
     text-shadow: 0 2px rgba(0, 0, 0, 0.4);
     cursor: pointer;
 }
 h3:active{
     text-shadow: 0 0px rgba(0, 0, 0, 0.4);
+}
+
+h2{
+    font-size:17px;
+    margin:0.5em;
 }
 
 select{
@@ -92,7 +98,7 @@ input{
     width:100%;
 }
 .inlineButtonContainer{
-    margin:10px 0 0 0;
+    margin:5px 0 0 0;
     position: relative;
 }
 
@@ -114,11 +120,29 @@ input{
 .inlineButtonContainer .button{
 
 }
+.popupCloseButton{
+    position:relative;
+    border-radius: 12px;
+    border-right: white 1px;
+    border-left: black 1px;
+    cursor: pointer;
+    right:0px;
+    bottom:100%;
+    color:white;
+    margin: 17px 0 0 0;
+    padding:3px;
+    width:40px;
+    height:40px;
+    float:right !important;
+    text-align: center; !important;
+    margin-right: 30px !important;
+}
 .button {
     position: inherit;
     margin:0px 0px;
-    padding: 14px 26px;
-    font-size: 14px;
+    padding: 0.4em 0.6em;
+    font-size: 0.8emnscW3Q
+    ROJ;NSCA;KWW
     line-height: 100%;
     text-shadow: 0 1px rgba(0, 0, 0, 0.4);
     background-color: #D95525;
@@ -139,23 +163,6 @@ input{
     box-shadow: 0px 3px 0px 0px rgba(200,60,0,1);
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
 }
-.popupCloseButton{
-    position:relative;
-    border-radius: 12px;
-    border-right: white 1px;
-    border-left: black 1px;
-    cursor: pointer;
-    right:0px;
-    bottom:100%;
-    color:white;
-    margin: 17px 0 0 0;
-    padding:3px;
-    width:40px;
-    height:40px;
-    float:right !important;
-    text-align: center; !important;
-    margin-right: 30px !important;
-}
 .button:active {
     margin-top: 2px;
     box-shadow: 0px 3px 0px 0px rgba(200,60,0,1);
@@ -171,8 +178,8 @@ input{
 /*Bastion.css*/
 .bigbutton {
     position: inherit;
-    margin:15px 0px 3px 0px;
-    padding: 40px 0;
+    margin:0.2em 0px 0.2em 0px;
+    padding: 0.4em 0;
     width:100%;
     font-size: 14px;
     line-height: 100%;
@@ -263,11 +270,11 @@ input{
     position: fixed;
     background-image: url('../img/refresh.png');
     float:right;
-    top:1em;
+    top:0.5em;
     right:2em;
     z-index: 100;
-    width:3.5em;
-    height:3.5em;
+    width:2em;
+    height:2em;
     background-size: 100%;
 }
 .refresh_button:active{
@@ -358,38 +365,48 @@ input{
     border-top: #E6E6E6;
     border-bottom: #A1A1A1;
 }
-.new{
-    width:80px;
+    .new{
+    width:1em;
     position: fixed;
-    height:80px;
+    height:1em;
     right:7%;
     bottom: 7%; 
     z-index: 20;
     background-color:#D13F32;
     color:white;
     text-align: center;
-    font-size: 80px;
-    padding: 10px;
+    font-size: 3em;
     box-shadow: 0 7px 10px 0 rgba(0, 0, 0, 0.5);
-    border-radius: 50px;
-}
+    border-radius: 2em;
+    }
 .content{
     height:100%;
     position:relative;
 }
 
-h2{
-    font-size:30px;
-}
-
-@media only screen and (max-device-width: 480px) {
-	h2{
-		font-size:40px;
-	}
-	h1{
-		font-size:30px;
-	}
-	input{
-		width:80%;
-	}
+@media only screen and (min-device-height : 768px) { /* 7" tablets */
+    h2{
+        margin:0.7em;
+        font-size: 1.8em;
+    }
+    h3{
+        margin:0.7em;
+        font-size: 1.5em;
+    }
+    .new{
+    width:1em;
+    height:1em;
+    font-size: 6em;
+    border-radius: 4em;
+    }
+    .bigbutton{
+        padding:0.8em 0;
+    }
+    .button{
+        padding: 1em;
+    }
+    .refresh_button{
+        width:3em;
+        height:3em;
+    }
 }

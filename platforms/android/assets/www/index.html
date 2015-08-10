@@ -28,7 +28,12 @@
     <title>Driver Logbook NSW</title>
 </head>
 <body>
-
+    <div id='loadingmask'></div>
+    <div data-role="popup" id="popupdiv" class="ui-content">
+        <div id="Header"><h4>Error</h4></div>
+        <a href="#" data-rel="back" data-role="button" data-icon="delete" class="ui-btn-right">X</a>
+        <p>Popup Message Test</p>
+    </div>
     <div class="app" data-role="page" id="loginPage">
         <div data-role="header" data-position="fixed" class="navbar">
             <h2>Driver Logbook NSW</h1>
@@ -47,11 +52,6 @@
                 <input type="password" id="password" placeholder="Password" name="password">
                 <div class="centerButtonContainer"><a class="button" id="login">Login</a></div>
             </form>
-            <div data-role="popup" id="popupdiv" class="ui-content">
-            	<div id="Header"><h4>Error</h4></div>
-            	<a href="#" data-rel="back" data-role="button" data-icon="delete" class="ui-btn-right">X</a>
-                <p>Popup Message Test</p>
-            </div>
         </div>
     
         <div data-role="footer" data-position="fixed">
@@ -110,7 +110,7 @@
 
     <div class="app" data-role="page" id="bastionPage">
         <div data-role="header" data-position="fixed" class="navbar">
-            <h2>Driver Logbook NSW</h1><div id="refreshBasicData" class="refresh_button"></div>
+            <h2>Main Menu</h1><div id="refreshBasicData" class="refresh_button"></div>
             <div data-role="navbar"></div>
         </div>
         <div data-role="content" class="content">
@@ -139,7 +139,7 @@
                 <h2> Add a New Vehicle</h2>
                 <input type="text" id="newVehicleName" placeholder="A name for the new vehicle">
                 <input type="text" id="newVehicleNumberplate" placeholder="The vehicle's license plate">
-                <button type="button" class="button" id="saveNewVehicle"></button>
+                <div class="centerButtonContainer"><a class="button" id="saveNewVehicle">Save</a></div>
             </div>
             <div id="newVehicle" class="new" href="#newVehiclePopup">+</div>
         </div>
@@ -159,7 +159,7 @@
                 <h2>Add a New Assistant Driver</h2><br>
                 <input type="text" id="newAssiDriverName" placeholder="Assistant Driver's Name">
                 <input type="text" id="newAssiDriverId" placeholder="Assistant Driver's Driver License Id">  
-                <button type="button" class="button" id="saveNewDriver">Ok</button>                 
+                <div class="centerButtonContainer"><a class="button" id="saveNewDriver">Save</a></div>                
             </div>
             <div id="newProfile" class="new">+</div>
         </div>
@@ -173,11 +173,11 @@
             <h2>New Trip</h2>
         </div>
         <div data-role="content" class="content" id="tripPageContainer">
-            <h3>What's the Odometer?</h3>
+            <h2>What's the Odometer?</h2>
             <input type="text" id="odoStart" placeholder="Odometer Start">
-            <h3>Who's driving?</h3>
+            <h2>Who's driving?</h2>
             <select id="selectDriver" data-role="none" ></select>
-            <h3>What are you Driving?</h3>
+            <h2>What are you Driving?</h2>
             <select id="selectVehicle" data-role="none" ></select>
             <div class="centerButtonContainer"><a class="button" id="beginTrip">Begin Trip</a></div>
         </div>
