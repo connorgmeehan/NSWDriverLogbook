@@ -76,7 +76,7 @@ $(document).ready(function () {
         $.mobile.changePage('#registerPage');
         localStorage.setItem('notFirstTime', true);
         console.log('notFirstTime: '+ localStorage.getItem('notFirstTime'));
-        queryUser("Hey, looks like it's your first time using the Driver Logbook app, would you like to load up the tutorial?", function(){tutorial('register');}, function(){$('#popupdiv').slideUp();});
+        queryUser("<h4>First Time?</h4>Hey, looks like it's your first time using the Driver Logbook app, would you like to load up the tutorial?", function(){tutorial('register');}, function(){$('#popupdiv').slideUp();});
     }
     localStorage.setItem('notFirstTime', undefined);
 
@@ -154,9 +154,8 @@ function tutorial(type){
             break;
         case 'supervisor':
             $('#tutorialmask').css({'display':'block'});
-            $('#profilesPageButton').click();
-            relayMessage('First we must add a profile for a supervisor that will supervise your driving.<br> We do this by clicking on the (+) plus button in the bottom right corner.',6000);
             setTimeout(function(){
+                relayMessage('First we must add a profile for a supervisor that will supervise your driving.<br> We do this by clicking on the (+) plus button in the bottom right corner.',9000);
                 $('#profilesPageButton').click();
                 setTimeout(function(){
                     $('#newProfilePopup').slideDown();
@@ -174,9 +173,9 @@ function tutorial(type){
                                 tutorial('supervisor');
                             },3500);
                         },1500);
-                    },2500);
-                },4000);
-            },4000);
+                    },4000);
+                },5000);
+            },2500);
             break;
         case 'vehicle':
             $('#tutorialmask').css({'display':'block'});
@@ -197,7 +196,7 @@ function tutorial(type){
                                 $('#newProfilePopup').slideUp();
                                 tutorial('vehicle');
                             });
-                        },4000);
+                        },2000);
                     },2500);
                 },4000);
             },4000);
@@ -211,15 +210,17 @@ function tutorial(type){
                     relayMessage("Now we must enter the odometer of the car you are using(in kilometres).  <br> It can't contain fullstops.",5000);
                     setTimeout(function(){
                         emulateText('#odoStart','23,560');
-                        relayMessage("And then we click Begin Trip").
-                        queryUser("Can you do the same with your car's odometer?",function(){
-                            $('#tutorialmask').css({'display':'none'});
-                            $('#odoStart').val('');
-                        }, function(){
-                            tutorial('newtrip');
-                            $('#odoStart').val('');
+                        setTimeout(function(){
+                            relayMessage("And then we click Begin Trip").
+                            queryUser("Can you do the same with your car's odometer?",function(){
+                                $('#tutorialmask').css({'display':'none'});
+                                $('#odoStart').val('');
+                            }, function(){
+                                tutorial('newtrip');
+                                $('#odoStart').val('');
+                            });
                         });
-                    },5000);
+                    },2000);
                 },2000);
             },3000);   
             break;
@@ -287,10 +288,10 @@ function bindButtons(){
     $("#login").bind("tap", handleLogin);
     $("#register").bind("tap",handleRegister);
     $(".logout").bind("tap", logOut);
-    $("#profilesPageButton").bind("tap", function(){getProfiles('profilespage');});
+    $("#profilesPageButton").bind("tap", function(){getSupervisors('profilespage');});
     $("#vehiclesPageButton").bind("tap",function(){getVehicles('vehiclespage');});
     $("#tripPageButton").bind("tap", function(){
-        getProfiles('trippage');
+        getSupervisors('trippage');
         getVehicles('trippage');
     });
     $("#getTripPage").bind("tap", getTripPage);
@@ -352,6 +353,7 @@ function handleLogin() {
                     $("#profilePageContainer").html("");
                     getTotalHours();
                     $.mobile.changePage('#bastionPage');
+                    $('#popupdiv').slideUp();
                     if(doingTutorial){
                         tutorial('supervisor');
                     }
@@ -380,33 +382,37 @@ function handleRegister() {
     
     if(newEmail!==""&&newName!==""&&newId!==""&&newPass!==""){
         if(newPass == repNewPass){
-            $.ajax({
-                url: hosturl+"?action=register",
-                data: {
-                    email: newEmail,
-                    password: newPass,
-                    drid: newId,
-                    fullname: newName,
-                },
-                type: 'POST',
-                success: function(data){
-                    if(data == 'success'){
-                        window.localStorage.setItem("seshstring", data);
-                        console.log(window.localStorage.getItem("seshstring"));
-                        $.mobile.changePage('#loginPage');
-                        if(tutorial){
-                            tutorial('login');
+            if(newId.length == 6 || newId.length == 8){
+                $.ajax({
+                    url: hosturl+"?action=register",
+                    data: {
+                        email: newEmail,
+                        password: newPass,
+                        drid: newId,
+                        fullname: newName,
+                    },
+                    type: 'POST',
+                    success: function(data){
+                        if(data == 'success'){
+                            window.localStorage.setItem("seshstring", data);
+                            console.log(window.localStorage.getItem("seshstring"));
+                            $.mobile.changePage('#loginPage');
+                            if(tutorial){
+                                tutorial('login');
+                            }
+                        }  else if(data == "duplicate_email") {
+                            errorMessage("The email you entered has already registered, please try an alternate. ");
+                        } else {
+                            errorMessage("Unkown error while trying to register. <br> Contact me at *****@***.com and tell me what happened. I'll sort it out :D.");
                         }
-                    }  else if(data == "duplicate_email") {
-                        errorMessage("The email you entered has already registered, please try an alternate. ");
-                    } else {
-                        errorMessage("Unkown error while trying to register. <br> Contact me at *****@***.com and tell me what happened. I'll sort it out :D.");
+                    },
+                    error: function (request, textStatus, errorThrown) {
+                        errorMessage('Error connecting to database.'/* + request + textStatus+ errorThrown*/);
                     }
-                },
-                error: function (request, textStatus, errorThrown) {
-                    errorMessage('Error connecting to database.'/* + request + textStatus+ errorThrown*/);
-                }
-            });
+                });
+            } else {
+                errorMessage('License Number must be 6 or 8 characters.')
+            }
         } else {
             errorMessage("Passwords in both fields must match.");
         }
@@ -479,7 +485,7 @@ function getVehicles(purpose){
                 }
             } else {
                 if(narray == null){
-                    errorMessage("You havn't added a Vehicle to drive yet, please add one now.")
+                    $('#vehiclePageContainer').html("<p id='welcomeInfo'>It's empty, tap the red + to get started.</p>");
                 }else{
                     $('#vehiclePageContainer').html("");                          // Clears the page so we dont get repeats
                     for (var i = 0; i < narray.length; i++) {
@@ -501,7 +507,7 @@ function getVehicles(purpose){
     });
 }
 
-function getProfiles(purpose){
+function getSupervisors(purpose){
     var profileArray = [];
     loading(true);
     $.ajax({
@@ -528,7 +534,7 @@ function getProfiles(purpose){
                 }
             } else {
                 if(narray == null){
-                    errorMessage("You havn't added a Supervisor yet, please add one now.");
+                    $('#vehiclePageContainer').html("<p id='welcomeInfo'>It's empty, tap the red + to get started.</p>");
                 } else {
                     if(doingTutorial){
                         $.mobile.changePage('#bastionPage');
@@ -627,6 +633,7 @@ function addVehicle(name, licenseno){
                     errorMessage('Session has ended, logged out');
                     logOut();
                 } else {
+                    $('newVehiclePopup').slideUp();
                     getVehicles();
                 }
             },
@@ -640,11 +647,11 @@ function addVehicle(name, licenseno){
         errorMessage("Don't forget to fill in all the fields!")
     }
 }
-function addProfile(name, licenseno){
+function addSupervisor(name, licenseno){
     var newAlias = $("#newAssiDriverName").val();
     var newLicNo = $("#newAssiDriverId").val();
     if(newAlias != '' && newLicNo != ''){
-        if(newLicNo.length == 8 || newLicNo.length == 8){
+        if(newLicNo.length == 6 || newLicNo.length == 8){
             $.ajax({
                 url: hosturl+"?action=newprofile",
                 data: {
@@ -658,7 +665,8 @@ function addProfile(name, licenseno){
                         errorMessage('Session has ended, logged out');
                         logOut();
                     } else {
-                        getVehicles();
+                        $('newProfilePopup').slideUp();
+                        getSupervisors();
                     }
                 },
                 error: function(data){
@@ -667,7 +675,7 @@ function addProfile(name, licenseno){
                 dataType: 'json',
             });
         } else {
-            errorMessage('License Number must be 8 numbers long')
+            errorMessage('License Number must be 6 or 8 characters long')
         }
     } else {
         errorMessage("Don't forget to fill in all the fields!")
