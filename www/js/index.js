@@ -304,7 +304,7 @@ function bindButtons(){
     });
     $("#refreshVehicles").bind("tap", function(){getVehicles('vehiclespage')});
     $("#refreshgetTotalHours").bind("tap", getTotalHours);
-    $("#saveNewDriver").bind("tap",addProfile);
+    $("#saveNewDriver").bind("tap",addSupervisor);
     $("#saveNewVehicle").bind("tap",addVehicle);
     $("#beginTrip").bind("tap",initTrip);
     $("#finalizeTripButton").bind("tap",function(){
