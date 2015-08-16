@@ -164,7 +164,7 @@ function tutorial(type){
                         emulateText('#newAssiDriverName','Mum');
                         setTimeout(function(){
                             emulateText('#newAssiDriverId','21415697');
-                            queryUser("And then click ok.  Can you do the same with your supervisor's information?",function(){
+                            queryUser("And then click 'Save'.  Can you do the same with your supervisor's information?",function(){
                                 $('#newAssiDriverId,#newAssiDriverName').val('');
                                 $('#tutorialmask').css({'display':'none'});
                                 $('#newProfilePopup').slideUp();
@@ -188,7 +188,7 @@ function tutorial(type){
                         emulateText('#newVehicleName','Holden Accord');
                         setTimeout(function(){
                             emulateText('#newVehicleNumberplate','BZD39P');
-                            queryUser("And then click ok.  Can you do the same with your vehicles's information?",function(){
+                            queryUser("And then click 'Save'.  Can you do the same with your vehicles information?",function(){
                                 $('#newVehicleNumberplate,#newVehicleName').val('');
                                 $('#tutorialmask').css({'display':'none'});
                             }, function(){
@@ -206,6 +206,8 @@ function tutorial(type){
             relayMessage("Now we can start a trip.  I'll click on the Start Trip button for you.",4000);
             setTimeout(function(){
                 $('#tripPageButton').click();
+                getSupervisors('trippage');
+                getVehicles('trippage');
                 setTimeout(function(){
                     relayMessage("Now we must enter the odometer of the car you are using(in kilometres).  <br> It can't contain fullstops.",5000);
                     setTimeout(function(){
@@ -219,17 +221,22 @@ function tutorial(type){
                                 tutorial('newtrip');
                                 $('#odoStart').val('');
                             });
-                        });
-                    },2000);
-                },2000);
-            },3000);   
+                        },5000);
+                    },3500);
+                },3500);
+            },4000);   
             break;
         case 'finalizetrip':
             $('#tutorialmask').css({'display':'block'});
             relayMessage("Ok, now that we've started a trip, I'll show you how to finalize one.")
             setTimeout(function(){
-                $('#tutorialmask').css({'display':'none'});
-                relayMessage("Just add the finishing odometer, make sure the information is ok and click finalize trip.   <br> Don't worry, this is just a demo and won't be saved. ");
+                setTimeout(function(){
+                    relayMessage("Don't forget to select the correct supervisor and vehicle used.");
+                    setTimeout(function(){
+                        $('#tutorialmask').css({'display':'none'});
+                        relayMessage("Just add the finishing odometer, make sure the information is ok and click finalize trip.   <br> Don't worry, this is just a demo and won't be saved. ");
+                    },3500);
+                },3500);
             },3500);
             break;
         case 'finish':
@@ -320,7 +327,7 @@ function bindButtons(){
     $(document).on('touchstart', function (e) {
         var container = $(".popup");
         
-        if (!container.is(e.target) && container.has(e.target).length === 0){
+        if ((!container.is(e.target) || !$('#tutorialmask').is(e.target))&& container.has(e.target).length === 0){
             container.slideUp();
         }
     });
@@ -487,6 +494,10 @@ function getVehicles(purpose){
                 if(narray == null){
                     $('#vehiclePageContainer').html("<p id='welcomeInfo'>It's empty, tap the red + to get started.</p>");
                 }else{
+                    if(doingTutorial){
+                        $.mobile.changePage('#bastionPage');
+                        tutorial('newtrip');
+                    }
                     $('#vehiclePageContainer').html("");                          // Clears the page so we dont get repeats
                     for (var i = 0; i < narray.length; i++) {
                         template = "<div id='"+i+"'class='listObject'><h4>"+(i+1)+". "+narray[i].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[i].licensenumber+"</p></div>";
