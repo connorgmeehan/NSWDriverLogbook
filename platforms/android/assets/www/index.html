@@ -22,13 +22,13 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDD353fOPh-KBUQ-2ekPCg75uxXRn0D9Tk&sensor=false"></script>-->
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="js/moment.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Driver Logbook NSW</title>
 </head>
 <body>
     <div id='loadingmask'></div>
+    <div id='tutorialmask'></div>
     <div data-role="popup" id="popupdiv" class="ui-content">
         <div id="Header"><h4>Error</h4></div>
         <a href="#" data-rel="back" data-role="button" data-icon="delete" class="ui-btn-right">X</a>
@@ -76,7 +76,8 @@
                     <input type="text" id="nEmail" placeholder="Email">
                     <input type="text" id="nfName" placeholder="Full Name">
                     <input type="text" id="nLNo" placeholder="License No.">
-                    <input type="text" id="nPass" placeholder="Password" >
+                    <input type="password" id="nPass" placeholder="Password" >
+                    <input type="password" id="rNPass" placeholder="Repeat Password">
                     <div class="centerButtonContainer"><a class="button" id="register">Register</a></div>
                 </form>
         </div>
@@ -110,6 +111,7 @@
 
     <div class="app" data-role="page" id="bastionPage">
         <div data-role="header" data-position="fixed" class="navbar">
+            <a data-role="button" class="logout">logout</a>
             <h2>Main Menu</h1><div id="refreshBasicData" class="refresh_button"></div>
             <div data-role="navbar"></div>
         </div>

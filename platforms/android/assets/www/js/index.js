@@ -4,6 +4,7 @@ var hosturl;                                                    //I need to swit
 var debug = false;                                              //Used to bypass some code that wont run (can't find location) when there is no intenet avaliable
 var tfhour = false;                                             //Twenty four hour = false
 var distributable = true;                                      //Switches between local server and liver server
+var doingTutorial = false;
 
 //Global Variables
 var tripInterval;
@@ -70,8 +71,14 @@ function getGeoLocation(){
     }
 }
 
-
 $(document).ready(function () {
+    if(localStorage.getItem('notFirstTime') != true  ){
+        localStorage.setItem('notFirstTime', true);
+        console.log('notFirstTime: '+ localStorage.getItem('notFirstTime'));
+        queryUser("Hey, looks like it's your first time using the Driver Logbook app, would you like to load up the tutorial?", function(){tutorial('register');}, function(){$('#popupdiv').slideUp();});
+    }
+    localStorage.setItem('notFirstTime', undefined);
+
     if(distributable){
         hosturl = "http://25767225.99atarplease.com/sdd/php/functions.php";
     } else {
@@ -87,7 +94,148 @@ $(document).ready(function () {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*                                                      Page Constructors       */
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+function tutorial(type){
+    console.log('Running Tutorial');
+    doingTutorial = true;
+    function emulateText(target, content){
+        console.log('Filling a form')
+        $(target).val('');
+        var stringToApply = "";
+        var length = content.length;
+        var index = 0
+        var stringToAdd
+        setInterval(editString,50);
+        function editString(){
+            if(index < length){
+                //console.log('adding to string brah' + stringToApply + content);
+                stringToAdd = content.slice(index, index+1);
+                stringToApply = stringToApply + stringToAdd;
+                index = index + 1;
+                $(target).val(stringToApply);
+            } else {
+                clearInterval(editString);
+            }
+        }
+    }
+    switch(type){
+        case 'register':
+            $('#tutorialmask').css({'display':'block'});
+            $.mobile.changePage('#registerPage');
+            relayMessage('First we must register an account, fill in the boxes like so.');
+            setTimeout(function(){
+                console.log('setp one')
+                emulateText('#nEmail','yourname@provider.com');
+                setTimeout(function(){
+                    emulateText('#nfName','John Doe');
+                    setTimeout(function(){
+                        emulateText('#nLNo', '13572468');
+                        setTimeout(function(){
+                            emulateText('#nPass', 'password');
+                            setTimeout(function(){
+                                emulateText('#rNPass', 'password');
+                                setTimeout(function(){
+        /*ILLUMINATI*/              queryUser('Make an account! Ready to do the same?', function(){
+                                        $('#rNPass,#nPass,#nLNo,#nfName,#nEmail').val('');
+                                        $('#tutorialmask').css({'display':'none'});
+                                        $('#popupdiv').slideUp();
+                                     },function(){
+                                        tutorial('register');
+                                    });
+                                }, 1500);
+                            }, 1500);
+                        }, 1500);
+                    }, 1500);
+                }, 1500);
+            },1500);
+            break;
+        case 'login':
+            relayMessage('Ok, now enter your email and password into these fields.');
+            break;
+        case 'supervisor':
+            $('#tutorialmask').css({'display':'block'});
+            $('#profilesPageButton').click();
+            relayMessage('First we must add a profile for a supervisor that will supervise your driving.<br> We do this by clicking on the (+) plus button in the bottom right corner.')
+            setTimeout(function(){
+                setTimeout(function(){
+                    $('#newProfilePopup').slideDown();
+                    $('#newProfile').css({'background-colour':'white'}).delay(400).css({'background-colour': '#D13F32'});
+                    setTimeout(function(){
+                        emulateText('#newAssiDriverName','Mum');
+                        setTimeout(function(){
+                            emulateText('#newAssiDriverId','21415697');
+                            queryUser("And then click ok.  Can you do the same with your supervisor's information?",function(){
+                                $('#newAssiDriverId,#newAssiDriverName').val('');
+                                $('#tutorialmask').css({'display':'none'});
+                                $('#newProfilePopup').slideUp();
+                            }, function(){
+                                $('#newAssiDriverId,#newAssiDriverName').val('');
+                                tutorial('supervisor');
+                            },3500);
+                        },1500);
+                    },2500);
+                },4000);
+            },4000);
+            break;
+        case 'vehicle':
+            $('#tutorialmask').css({'display':'block'});
+            relayMessage("Next we'll add a vehicle that you will be driving.<br>We'll click on the add new button again");
+            $('#vehiclesPageButton').click();
+            setTimeout(function(){
+                setTimeout(function(){
+                    $('#newVehiclePopup').slideDown();
+                    setTimeout(function(){
+                        emulateText('#newVehicleName','Holden Accord');
+                        setTimeout(function(){
+                            emulateText('#newVehicleNumberplate','BZD39P');
+                            queryUser("And then click ok.  Can you do the same with your vehicles's information?",function(){
+                                $('#newVehicleNumberplate,#newVehicleName').val('');
+                                $('#tutorialmask').css({'display':'none'});
+                            }, function(){
+                                $('#newVehicleNumberplate,#newVehicleName').val('');
+                                $('#newProfilePopup').slideUp();
+                                tutorial('vehicle');
+                            });
+                        },2500);
+                    },2500);
+                },2500);
+            },2500);
+            break;
+        case 'newtrip':
+            $('#tutorialmask').css({'display':'block'});
+            relayMessage("Now we can start a trip.  I'll click on the Start Trip button for you.");
+            setTimeout(function(){
+                $('#tripPageButton').click();
+                setTimeout(function(){
+                    relayMessage("Now we must enter the odometer of the car you are using(in kilometres).  <br> It can't contain fullstops.");
+                    setTimeout(function(){
+                        emulateText('#odoStart','23,560');
+                        relayMessage("And then we click Begin Trip").
+                        queryUser("Can you do the same with your car's odometer?",function(){
+                            $('#tutorialmask').css({'display':'none'});
+                            $('#odoStart').val('');
+                        }, function(){
+                            tutorial('newtrip');
+                            $('#odoStart').val('');
+                        });
+                    },3000);
+                },2000);
+            },3000);   
+            break;
+        case 'finalizetrip':
+            $('#tutorialmask').css({'display':'block'});
+            relayMessage("Ok, now that we've started a trip, I'll show you how to finalize one.")
+            setTimeout(function(){
+                $('#tutorialmask').css({'display':'none'});
+                relayMessage("Just add the finishing odometer, make sure the information is ok and click finalize trip.   <br> Don't worry, this is just a demo and won't be saved. ");
+            },3500);
+            break;
+        case 'finish':
+            relayMessage('Congratulations, you just <b>pretend<b> did your first Driver Logbook trip. <br> Thanks, from Connor Meehan')
+        default:
+            errorMessage("I don't even know how you got here but you broke it... <br> Please email ***@****.*** and tell me what went wrong and I'll get right on it.");
+            break;
+    }
+}
 function pageLayout(){
     //This is to fix some of the jQuery mobile styling paradigms.
     var contentHeight = $(window).height()*0.79;
@@ -103,9 +251,27 @@ function pageLayout(){
 }
 
 function errorMessage(error){
-    $("#popupdiv").html("<br><div id='h'><h4>Error Recieved</h4></div><br><p>"+error+"</p>");
-    $("#popupdiv").slideDown().delay(3500).slideUp();
+    $("#popupdiv").html("<div id='h'><h4>Error Recieved</h4></div><br><p>"+error+"</p>");
+    $("#popupdiv").css({'background-colour':'#DEDBA7'}).slideDown().delay(3500).slideUp();
     console.log('ERR:  '+error);
+}
+function relayMessage(message){
+    $("#popupdiv").html("<br><p>"+message+"</p>");
+    $("#popupdiv").css({'background-colour':'#00A388'}).slideDown().delay(3500).slideUp();
+    console.log('MSG:  '+message);
+}
+function queryUser(query,yesaction,noaction){
+    $("#popupdiv").html("<br><p>"+query+"</p><br><div class='queryButtonContainer'><a class='button' id='accept'>Ok</a></div><div class='queryButtonContainer'><a class='button' id='decline'>No Thanks</a></div>");
+    $("#popupdiv").css({'background-colour':'#ACF0F2'}).slideDown();
+    $("#accept").bind("tap", function(){
+        yesaction();
+        $('#popupdiv').slideUp();
+    });
+    $("#decline").bind('tap',function(){
+        noaction();
+        $('#popupdiv').slideUp();
+    });
+    console.log('QRY:  '+query);
 }
 
 function loading(binary){
@@ -184,6 +350,9 @@ function handleLogin() {
                     $("#profilePageContainer").html("");
                     getTotalHours();
                     $.mobile.changePage('#bastionPage');
+                    if(doingTutorial){
+                        tutorial('supervisor');
+                    }
                 } else {
                     loading(false);
                     errorMessage("Failure to login, please check the entered email and password.");
@@ -223,6 +392,9 @@ function handleRegister() {
                         window.localStorage.setItem("seshstring", data);
                         console.log(window.localStorage.getItem("seshstring"));
                         $.mobile.changePage('#loginPage');
+                        if(tutorial){
+                            tutorial('login');
+                        }
                     }  else if(data == "duplicate_email") {
                         errorMessage("The email you entered has already registered, please try an alternate. ");
                     } else {
@@ -354,14 +526,17 @@ function getProfiles(purpose){
                 }
             } else {
                 if(narray == null){
-                    errorMessage("You havn't added a Supervisory et, please add one now.");
+                    errorMessage("You havn't added a Supervisor yet, please add one now.");
                 } else {
+                    if(doingTutorial){
+                        $.mobile.changePage('#bastionPage');
+                        tutorial('vehicle');
+                    }
                     console.log('profilepage');
                     $('#profilePageContainer').html(""); // Clears the page
                     for (var o = 0; o < narray.length; o++) {
                         template = "<div id='"+o+"'class='listObject'><h4>"+(o+1)+". "+narray[o].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[o].licensenumber+"</p></div>";
                         $('#profilePageContainer').append(template);
-                        console.log(narray.alias);
                     }
                 }   
             }
@@ -540,6 +715,7 @@ function initTrip(){
                     $.mobile.changePage('#progressTripPage');
                     $("#tripInfo").html("Odometer at Start: "+odoStart+"<br><br>Supervisor: "+ supervisor + "<br><br>Vehicle Used: "+vehicleUsed+"<br><br>");
                     tripInterval = setInterval(tripLoop, 1000);//1 second
+                    tutorial('finalizetrip');
                 }
             }
         } else {
@@ -610,34 +786,38 @@ function completeTrip(){
                                          '<p><b>Supervisor: </b>'+window.localStorage.getItem('newTripS')+'</p><br>'+
                                          '<p><b>Vehicle: </b>'+window.localStorage.getItem('newTripV')+'</p><br>'+
                                          '<p><b>From: '+previousLocation[0]+'<br>  To: '+currentLocation[0]+'</p></b></div>');
-                $.mobile.changePage('#bastionPage');                
-                $.ajax({
-                    url: hosturl+'?action=newtrip',
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: { seshstring: window.localStorage.getItem("seshstring"),
-                            dbodometerstart: odoStart,
-                            dbodometerfinish: odoFinish,
-                            dbtimestart: timeStart,
-                            dbtimefinish: timeFinish,
-                            dbsupervisor: assistantDriver,
-                            dbvehicle: vehicleUsed,
-                            dblocstart: JSON.stringify(previousLocation),
-                            dblocfinish: JSON.stringify(currentLocation),
-                            dbtriplength: totalTime},
-                    success: function(data){
-                        $("#bastionPage").append('<div id="letter"></div>');
-                        $("#letter").append('<div id="flap"></div>').css({display: 'block'}).delay(7500).animate({left: 1000}, 1000).delay(1000).queue(function() { $(this).remove(); });
-                        $("#completedDisplay").css({display: 'block'}).delay(7000).toggle('fold').queue(function() { $(this).remove(); });
-                        $("#odoStart").val("");
-                        console.log("Successfully added trip");
-                        loading(false);
-                    },
-                    error: function(data){
-                        $('#completedDisplay').append('<div id="resendPageButton" class="button">Retry</div>')
-                        errorMessage('Failure to send');
-                    }
-                });
+                $.mobile.changePage('#bastionPage');    
+                if(!doingTutorial){
+                    $.ajax({
+                        url: hosturl+'?action=newtrip',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: { seshstring: window.localStorage.getItem("seshstring"),
+                                dbodometerstart: odoStart,
+                                dbodometerfinish: odoFinish,
+                                dbtimestart: timeStart,
+                                dbtimefinish: timeFinish,
+                                dbsupervisor: assistantDriver,
+                                dbvehicle: vehicleUsed,
+                                dblocstart: JSON.stringify(previousLocation),
+                                dblocfinish: JSON.stringify(currentLocation),
+                                dbtriplength: totalTime},
+                        success: function(data){
+                            $("#bastionPage").append('<div id="letter"></div>');
+                            $("#letter").append('<div id="flap"></div>').css({display: 'block'}).delay(7500).animate({left: 1000}, 1000).delay(1000).queue(function() { $(this).remove(); });
+                            $("#completedDisplay").css({display: 'block'}).delay(7000).toggle('fold').queue(function() { $(this).remove(); });
+                            $("#odoStart").val("");
+                            console.log("Successfully added trip");
+                            loading(false);
+                        },
+                        error: function(data){
+                            $('#completedDisplay').append('<div id="resendPageButton" class="button">Retry</div>')
+                            errorMessage('Failure to send');
+                        }
+                    });
+                } else {
+                    tutorial('finish');
+                }
             } else {
                 errorMessage('You must enter a value for the Odometer, it can be up to 11 characters.');
                 loading(false);

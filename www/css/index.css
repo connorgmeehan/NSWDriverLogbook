@@ -99,6 +99,7 @@ input{
 }
 .inlineButtonContainer{
     margin:5px 0 0 0;
+    width:1em;
     position: relative;
 }
 
@@ -116,10 +117,24 @@ input{
     top:0;
     background:#FFF url('../img/loading.gif') center no-repeat;
 }
-
-.inlineButtonContainer .button{
-
+#tutorialmask{
+    display: none;
+    z-index: 1001;
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    background:#FFF;
+    opacity:0;
 }
+.queryButtonContainer .button{
+    width:8em;
+    height:2em;
+    padding:0.8em 0 0;
+    margin:0 0.4em;
+    float:left;
+}
+
 .popupCloseButton{
     position:relative;
     border-radius: 12px;
@@ -139,10 +154,9 @@ input{
 }
 .button {
     position: inherit;
-    margin:0px 0px;
+    margin:0px 0.8em;
     padding: 0.4em 0.6em;
-    font-size: 0.8emnscW3Q
-    ROJ;NSCA;KWW
+    font-size: 0.8em;
     line-height: 100%;
     text-shadow: 0 1px rgba(0, 0, 0, 0.4);
     background-color: #D95525;
@@ -297,8 +311,8 @@ input{
     background-color:white;
 }
 .logout{
-    top:5%;
-    left:1%;
+    top:1.5em;
+    left:1.5em;
     padding:10px;
     position:fixed;
     width:50px;
@@ -308,8 +322,8 @@ input{
     border-radius: 4px;
 }
 .logout:active{
-    top:5.5%;
-    left:1%;
+    top:1.6em;
+    left:1.5em;
     padding:10px;
     position:fixed;
     width:50px;
@@ -322,6 +336,7 @@ input{
 
 #popupdiv{
 	position:fixed;
+    z-index: 1002;
     margin: 0 auto;
 	display:none;
     bottom:0;
@@ -348,8 +363,9 @@ input{
     position:absolute;
     text-align: center;
     width:90%;
-    height:50%;
+    height: auto;
     top:5%;
+    padding-bottom: 10%;
     margin:0 auto;
     background-color: #DEDBA7;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.3);
@@ -403,7 +419,8 @@ input{
         padding:0.8em 0;
     }
     .button{
-        padding: 0.8em 0;
+        padding: 0.8em 0.8em;
+        margin:4px 0px;
     }
     .refresh_button{
         width:3em;
