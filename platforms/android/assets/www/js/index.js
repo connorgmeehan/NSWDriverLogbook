@@ -124,12 +124,11 @@ function tutorial(type){
             $.mobile.changePage('#registerPage');
             relayMessage('First we must register an account, fill in the boxes like so.',3000);
             setTimeout(function(){
-                console.log('setp one')
                 emulateText('#nEmail','yourname@provider.com');
                 setTimeout(function(){
                     emulateText('#nfName','John Doe');
                     setTimeout(function(){
-                        emulateText('#nLNo', '13572468');
+                        emulateText('#nLNo', '13572468 (8 or 6 chars)');
                         setTimeout(function(){
                             emulateText('#nPass', 'password');
                             setTimeout(function(){
@@ -224,17 +223,19 @@ function tutorial(type){
                         },5000);
                     },3500);
                 },3500);
-            },4000);   
+            },5000);   
             break;
         case 'finalizetrip':
             $('#tutorialmask').css({'display':'block'});
             relayMessage("Ok, now that we've started a trip, I'll show you how to finalize one.")
             setTimeout(function(){
+                emulateUser('#odoFinish','23,572');
                 setTimeout(function(){
                     relayMessage("Don't forget to select the correct supervisor and vehicle used.");
                     setTimeout(function(){
                         $('#tutorialmask').css({'display':'none'});
                         relayMessage("Just add the finishing odometer, make sure the information is ok and click finalize trip.   <br> Don't worry, this is just a demo and won't be saved. ");
+                        
                     },3500);
                 },3500);
             },3500);
