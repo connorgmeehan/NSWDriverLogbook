@@ -39,8 +39,8 @@
             <h2>Driver Logbook NSW</h1>
             <div data-role="navbar">
             <ul>
+                <li><a href="#registerPage" data-role="button"><h3>Sign Up</h3></a></li>
                 <li><a href="#loginPage" data-role="button"><h3>Login</h3></a></li>
-                <li><a href="#registerPage" data-role="button"><h3>Register</h3></a></li>
                 <li><a href="#forgotPage" data-role="button"><h3>Forgot</h3></a></li>
             </ul>
             </div>
@@ -48,6 +48,7 @@
     
         <div data-role="content" class="content" id="content">
             <form id="loginField">
+                <p id='welcomeInfo'> Already have an account?  Log in! <br><br><b><u><a href='#registerPage'>Or create an account at the Sign Up page.</a></u></b></p>
                 <input type="text" id="email" placeholder="Email address:" name="username" data-enhance="true">
                 <input type="password" id="password" placeholder="Password" name="password">
                 <div class="centerButtonContainer"><a class="button" id="login">Login</a></div>
@@ -64,8 +65,8 @@
     
             <div data-role="navbar">
             <ul>
+                <li><a href="#registerPage" data-role="button"><h3>Sign Up</h3></a></li>
                 <li><a href="#loginPage" data-role="button"><h3>Login</h3></a></li>
-                <li><a href="#registerPage" data-role="button"><h3>Register</h3></a></li>
                 <li><a href="#forgotPage" data-role="button"><h3>Forgot</h3></a></li>
             </ul>
             </div>
@@ -73,12 +74,13 @@
     
         <div data-role="content" class="content" id="content">
                 <form id="registerField">
+                <p id='welcomeInfo'><b><u><a href='#loginPage'>Already have an account?  Log in here!</a></u></b></p>
                     <input type="text" id="nEmail" placeholder="Email">
                     <input type="text" id="nfName" placeholder="Full Name">
                     <input type="text" id="nLNo" placeholder="License No.">
                     <input type="password" id="nPass" placeholder="Password" >
                     <input type="password" id="rNPass" placeholder="Repeat Password">
-                    <div class="centerButtonContainer"><a class="button" id="register">Register</a></div>
+                    <div class="centerButtonContainer"><a class="button" id="register">Sign Up</a></div>
                 </form>
         </div>
     
@@ -92,8 +94,8 @@
     
             <div data-role="navbar">
             <ul>
+                <li><a href="#registerPage" data-role="button"><h3>Sign Up</h3></a></li>
                 <li><a href="#loginPage" data-role="button"><h3>Login</h3></a></li>
-                <li><a href="#registerPage" data-role="button"><h3>Register</h3></a></li>
                 <li><a href="#forgotPage" data-role="button"><h3>Forgot</h3></a></li>
             </ul>
             </div>
@@ -138,7 +140,7 @@
         <div id="vehiclePageContainer"></div>
             <div id="newVehiclePopup" class="popup">
                 <br>
-                <h2> Add a New Vehicle</h2>
+                <h3> Add a New Vehicle</h3>
                 <input type="text" id="newVehicleName" placeholder="A name for the new vehicle">
                 <input type="text" id="newVehicleNumberplate" placeholder="The vehicle's license plate">
                 <div class="centerButtonContainer"><a class="button" id="saveNewVehicle">Save</a></div>
@@ -158,9 +160,9 @@
         <div id="profilePageContainer"></div>
             <div id="newProfilePopup" class="popup">
                 <br>
-                <h2>Add a New Assistant Driver</h2><br>
-                <input type="text" id="newAssiDriverName" placeholder="Assistant Driver's Name">
-                <input type="text" id="newAssiDriverId" placeholder="Assistant Driver's Driver License Id">  
+                <h3>Add a Supervisor</h3><br>
+                <input type="text" id="newAssiDriverName" placeholder="Supervisor's">
+                <input type="text" id="newAssiDriverId" placeholder="Supervisor's Driver License Id">  
                 <div class="centerButtonContainer"><a class="button" id="saveNewDriver">Save</a></div>                
             </div>
             <div id="newProfile" class="new">+</div>

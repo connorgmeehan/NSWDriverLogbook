@@ -73,6 +73,7 @@ function getGeoLocation(){
 
 $(document).ready(function () {
     if(localStorage.getItem('notFirstTime') != true  ){
+        $.mobile.changePage('#registerPage');
         localStorage.setItem('notFirstTime', true);
         console.log('notFirstTime: '+ localStorage.getItem('notFirstTime'));
         queryUser("Hey, looks like it's your first time using the Driver Logbook app, would you like to load up the tutorial?", function(){tutorial('register');}, function(){$('#popupdiv').slideUp();});
@@ -121,7 +122,7 @@ function tutorial(type){
         case 'register':
             $('#tutorialmask').css({'display':'block'});
             $.mobile.changePage('#registerPage');
-            relayMessage('First we must register an account, fill in the boxes like so.');
+            relayMessage('First we must register an account, fill in the boxes like so.',3000);
             setTimeout(function(){
                 console.log('setp one')
                 emulateText('#nEmail','yourname@provider.com');
@@ -149,13 +150,14 @@ function tutorial(type){
             },1500);
             break;
         case 'login':
-            relayMessage('Ok, now enter your email and password into these fields.');
+            relayMessage('Ok, now enter your email and password into these fields.',3000);
             break;
         case 'supervisor':
             $('#tutorialmask').css({'display':'block'});
             $('#profilesPageButton').click();
-            relayMessage('First we must add a profile for a supervisor that will supervise your driving.<br> We do this by clicking on the (+) plus button in the bottom right corner.')
+            relayMessage('First we must add a profile for a supervisor that will supervise your driving.<br> We do this by clicking on the (+) plus button in the bottom right corner.',6000);
             setTimeout(function(){
+                $('#profilesPageButton').click();
                 setTimeout(function(){
                     $('#newProfilePopup').slideDown();
                     $('#newProfile').css({'background-colour':'white'}).delay(400).css({'background-colour': '#D13F32'});
@@ -178,9 +180,9 @@ function tutorial(type){
             break;
         case 'vehicle':
             $('#tutorialmask').css({'display':'block'});
-            relayMessage("Next we'll add a vehicle that you will be driving.<br>We'll click on the add new button again");
-            $('#vehiclesPageButton').click();
             setTimeout(function(){
+                relayMessage("Next we'll add a vehicle that you will be driving.<br>We'll click on the add new button again",3000);
+                $('#vehiclesPageButton').click();
                 setTimeout(function(){
                     $('#newVehiclePopup').slideDown();
                     setTimeout(function(){
@@ -195,18 +197,18 @@ function tutorial(type){
                                 $('#newProfilePopup').slideUp();
                                 tutorial('vehicle');
                             });
-                        },2500);
+                        },4000);
                     },2500);
-                },2500);
-            },2500);
+                },4000);
+            },4000);
             break;
         case 'newtrip':
             $('#tutorialmask').css({'display':'block'});
-            relayMessage("Now we can start a trip.  I'll click on the Start Trip button for you.");
+            relayMessage("Now we can start a trip.  I'll click on the Start Trip button for you.",4000);
             setTimeout(function(){
                 $('#tripPageButton').click();
                 setTimeout(function(){
-                    relayMessage("Now we must enter the odometer of the car you are using(in kilometres).  <br> It can't contain fullstops.");
+                    relayMessage("Now we must enter the odometer of the car you are using(in kilometres).  <br> It can't contain fullstops.",5000);
                     setTimeout(function(){
                         emulateText('#odoStart','23,560');
                         relayMessage("And then we click Begin Trip").
@@ -217,7 +219,7 @@ function tutorial(type){
                             tutorial('newtrip');
                             $('#odoStart').val('');
                         });
-                    },3000);
+                    },5000);
                 },2000);
             },3000);   
             break;
@@ -255,9 +257,9 @@ function errorMessage(error){
     $("#popupdiv").css({'background-colour':'#DEDBA7'}).slideDown().delay(3500).slideUp();
     console.log('ERR:  '+error);
 }
-function relayMessage(message){
+function relayMessage(message, delay){
     $("#popupdiv").html("<br><p>"+message+"</p>");
-    $("#popupdiv").css({'background-colour':'#00A388'}).slideDown().delay(3500).slideUp();
+    $("#popupdiv").css({'background-colour':'#00A388'}).slideDown().delay(delay).slideUp();
     console.log('MSG:  '+message);
 }
 function queryUser(query,yesaction,noaction){
@@ -642,7 +644,7 @@ function addProfile(name, licenseno){
     var newAlias = $("#newAssiDriverName").val();
     var newLicNo = $("#newAssiDriverId").val();
     if(newAlias != '' && newLicNo != ''){
-        if(newLicNo.length == 8 && typeof(parseInt(newLicNo)) == 'number'){
+        if(newLicNo.length == 8 || newLicNo.length == 8){
             $.ajax({
                 url: hosturl+"?action=newprofile",
                 data: {

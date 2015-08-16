@@ -84,6 +84,13 @@ input{
         right:0px;
     }
 
+#welcomeInfo{
+    font-size: 1.3em;   
+    margin:5% 0 5% ;
+    text-align: center;
+    padding:0 10% 0 10%;
+}
+
 .navbar{
     background-color:#01A2A6;
     color:white;
@@ -99,7 +106,6 @@ input{
 }
 .inlineButtonContainer{
     margin:5px 0 0 0;
-    width:1em;
     position: relative;
 }
 
