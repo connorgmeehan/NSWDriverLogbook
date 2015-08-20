@@ -103,6 +103,19 @@ input{
         border-radius: 4em;
         box-shadow: 0 7px 10px 0 rgba(0, 0, 0, 0.5);
     }
+    #closeDemo{
+        cursor:pointer;
+        position: fixed;
+        float: right;
+        right: 0;
+        margin-right: 0.4em;
+        color: white;
+        box-shadow: 0 7px 10px 0 rgba(0, 0, 0, 0.5);
+    }
+    #closeDemo:active{
+        margin-top:0.05em;
+        box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.5);
+    }
 
 .navbar{
     background-color:#01A2A6;
