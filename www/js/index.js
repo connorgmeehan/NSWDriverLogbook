@@ -315,9 +315,16 @@ function bindButtons(){
     $("#login").bind("tap", handleLogin);
     $("#register").bind("tap",handleRegister);
     $(".logout").bind("tap", logOut);
-    $("#profilesPageButton").bind("tap", function(){getSupervisors('profilespage');});
-    $("#vehiclesPageButton").bind("tap",function(){getVehicles('vehiclespage');});
+    $("#profilesPageButton").bind("tap", function(){
+        $.mobile.changePage('#profilesPage');
+        getSupervisors('profilespage');
+    });
+    $("#vehiclesPageButton").bind("tap",function(){
+        $.mobile.changePage('#profilesPage');
+        getVehicles('vehiclespage');
+    });
     $("#tripPageButton").bind("tap", function(){
+        $.mobile.changePage('#newTripPage');
         getSupervisors('trippage');
         getVehicles('trippage');
     });
@@ -529,9 +536,9 @@ function getVehicles(purpose){
             loading(false);
             console.log("error"+data);
         },
-        complete: function(data){
+        /*complete: function(data){
             loading(false);
-        },
+        },*/
         dataType: 'json',
     });
 }
@@ -569,7 +576,7 @@ function getSupervisors(purpose){
                         $.mobile.changePage('#bastionPage');
                         tutorial('vehicle');
                     }
-                    console.log('profilepage');
+                    console.log(narray[0].alias);
                     $('#profilePageContainer').html(""); // Clears the page
                     for (var o = 0; o < narray.length; o++) {
                         template = "<div id='"+o+"'class='listObject'><h4>"+(o+1)+". "+narray[o].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[o].licensenumber+"</p></div>";
@@ -583,9 +590,9 @@ function getSupervisors(purpose){
             loading(false);
             console.log("error"+data + profileArray);
         },
-        complete: function(data){
+        /*complete: function(data){
             loading(false);
-        },
+        },*/
         dataType: 'json',
     });
 }
@@ -601,7 +608,7 @@ function getTripPage(){
         type: 'POST',
         success: function(data){
             loading(false);
-            console.log(data);
+            console.table(data);
             var narray = data;
             $('#tripListContainer').html(''); // Clears the page so we dont get repeats
             for(var e = 0; e < narray.length; e++) {
@@ -741,6 +748,7 @@ function initTrip(){
                     setTimeout( waitForGeoLocationInit,1500);
                     console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s');
                     currentLocation = getGeoLocation();
+                    
                 } else {
                     loading(false);
                     console.debug(currentLocation);
