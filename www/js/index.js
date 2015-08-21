@@ -633,6 +633,7 @@ function getTripPage(){
 }
 
 function getTotalHours(){
+    console.log('doingTut:  '+doingTutorial);
     $.ajax({
         url: hosturl+"?action=gettotalhours",
         data: {
