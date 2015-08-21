@@ -73,7 +73,7 @@ function getGeoLocation(){
 
 $(document).ready(function () {
     if(localStorage.getItem('notFirstTime') != true  ){
-        $.pagecontainer.change('#registerPage');
+        $.mobile.changePage('#registerPage');
         localStorage.setItem('notFirstTime', true);
         console.log('notFirstTime: '+ localStorage.getItem('notFirstTime'));
         queryUser("<h4>First Time?</h4>Hey, looks like it's your first time using the Driver Logbook app, would you like to load up the tutorial?", function(){tutorial('register');}, function(){$('#popupdiv').slideUp();});
@@ -120,7 +120,7 @@ function tutorial(type){
     switch(type){
         case 'register':
             $('#tutorialmask').css({'display':'block'});
-            $.pagecontainer.change('#registerPage');
+            $.mobile.changePage('#registerPage');
             relayMessage('First we must register an account, fill in the boxes like so.',3000);
             setTimeout(function(){
                 emulateText('#nEmail','yourname@provider.com');
@@ -316,15 +316,16 @@ function bindButtons(){
     $("#register").bind("tap",handleRegister);
     $(".logout").bind("tap", logOut);
     $("#profilesPageButton").bind("tap", function(){
-        $.pagecontainer.change('#profilesPage');
+        $.mobile.changePage('#profilesPage');
         getSupervisors('profilespage');
     });
     $("#vehiclesPageButton").bind("tap",function(){
-        $.pagecontainer.change('#profilesPage');
+        $.mobile.changePage($('#profilesPage'),{allowSamePageTransition:true})
+        $.mobile.changePage('#profilesPage');
         getVehicles('vehiclespage');
     });
     $("#tripPageButton").bind("tap", function(){
-        $.pagecontainer.change('#newTripPage');
+        $.mobile.changePage('#newTripPage');
         getSupervisors('trippage');
         getVehicles('trippage');
     });
@@ -347,7 +348,7 @@ function bindButtons(){
         if(doingTutorial){
             tutorial('finalizetrip');
         }
-        $.pagecontainer.change('#finalizeTripPage');
+        $.mobile.changePage('#finalizeTripPage');
     });
     $("#completeTripButton").bind("tap", completeTrip);
     $(".cancelTrip").bind("tap", cancelTrip); 
@@ -393,7 +394,7 @@ function handleLogin() {
                     $('#vehiclePageContainer').html("");
                     $("#profilePageContainer").html("");
                     getTotalHours();
-                    $.pagecontainer.change('#bastionPage');
+                    $.mobile.changePage('#bastionPage');
                     $('#popupdiv').slideUp();
                     if(doingTutorial){
                         tutorial('supervisor');
@@ -437,7 +438,7 @@ function handleRegister() {
                         if(data == 'success'){
                             window.localStorage.setItem("seshstring", data);
                             console.log(window.localStorage.getItem("seshstring"));
-                            $.pagecontainer.change('#loginPage');
+                            $.mobile.changePage('#loginPage');
                             if(tutorial){
                                 tutorial('login');
                             }
@@ -478,7 +479,7 @@ function logOut(){
     }).done(function(){
         loading(false);
         window.localStorage.setItem("seshstring", '');
-        $.pagecontainer.change('#loginPage');
+        $.mobile.changePage('#loginPage');
         errorMessage('Successfully logged out');
         $("#tripInfo2").html('');
         $('#selectVehicle').html("");
@@ -520,14 +521,14 @@ function getVehicles(purpose){
                     $('#vehiclePageContainer').html("<p id='welcomeInfo'>It's empty, tap the red + to get started.</p>");
                 }else{
                     if(doingTutorial){
-                        $.pagecontainer.change('#bastionPage');
+                        $.mobile.changePage('#bastionPage');
                         tutorial('newtrip');
                     }
                     $('#vehiclePageContainer').html("");                          // Clears the page so we dont get repeats
                     for (var i = 0; i < narray.length; i++) {
                         template = "<div id='"+i+"'class='listObject'><h4>"+(i+1)+". "+narray[i].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[i].licensenumber+"</p></div>";
                         $('#vehiclePageContainer').append(template);
-                        console.log('array: '+narray);
+                        console.table(narray);
                     }
                 }
             }
@@ -573,7 +574,7 @@ function getSupervisors(purpose){
                     $('#vehiclePageContainer').html("<p id='welcomeInfo'>It's empty, tap the red + to get started.</p>");
                 } else {
                     if(doingTutorial){
-                        $.pagecontainer.change('#bastionPage');
+                        $.mobile.changePage('#bastionPage');
                         tutorial('vehicle');
                     }
                     console.log(narray[0].alias);
@@ -759,7 +760,7 @@ function initTrip(){
                     window.localStorage.setItem("newTripV", vehicleUsed );
                     window.localStorage.setItem("newTripT", timeStart);
                     window.localStorage.setItem("newGeoLoc", JSON.stringify(currentLocation));
-                    $.pagecontainer.change('#progressTripPage');
+                    $.mobile.changePage('#progressTripPage');
                     $("#tripInfo").html("Odometer at Start: "+odoStart+"<br><br>Supervisor: "+ supervisor + "<br><br>Vehicle Used: "+vehicleUsed+"<br><br>");
                     tripInterval = setInterval(tripLoop, 1000);//1 second
                 }
@@ -832,7 +833,7 @@ function completeTrip(){
                                          '<p><b>Supervisor: </b>'+window.localStorage.getItem('newTripS')+'</p><br>'+
                                          '<p><b>Vehicle: </b>'+window.localStorage.getItem('newTripV')+'</p><br>'+
                                          '<p><b>From: '+previousLocation[0]+'<br>  To: '+currentLocation[0]+'</p></b></div>');
-                $.pagecontainer.change('#bastionPage');    
+                $.mobile.changePage('#bastionPage');    
                 if(!doingTutorial){
                     $.ajax({
                         url: hosturl+'?action=newtrip',

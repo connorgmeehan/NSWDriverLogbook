@@ -24,6 +24,9 @@
     <preference name="android-minSdkVersion" value="7" />
     <preference name="android-installLocation" value="auto" />
     <gap:plugin name="org.apache.cordova.battery-status" />
+    <gap:config-file platform="android" parent="/manifest">
+     <application android:debuggable="true" />
+    </gap:config-file>
     <!--<gap:plugin name="org.apache.cordova.camera" />-->
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
