@@ -325,7 +325,9 @@ function bindButtons(){
         getSupervisors('trippage');
         getVehicles('trippage');
     });
-    $("#getTripPage").bind("tap", getTripPage);
+    $("#getTripPage").bind("tap", function(){
+        getTripPage;
+    });
     $("#newVehicle").bind("tap", function(){
         $('#newVehiclePopup').slideDown();
 
@@ -534,9 +536,6 @@ function getVehicles(purpose){
             loading(false);
             console.log("error"+data);
         },
-        /*complete: function(data){
-            loading(false);
-        },*/
         dataType: 'json',
     });
 }
@@ -607,7 +606,6 @@ function getTripPage(){
         },
         type: 'POST',
         success: function(data){
-            loading(false);
             console.table(data);
             var narray = data;
             $('#tripListContainer').html(''); // Clears the page so we dont get repeats
@@ -618,14 +616,13 @@ function getTripPage(){
                     '</h4><h6>'+narray[e].dbtimestart+' - '+narray[e].dbtimefinish+
                     '</h6><h5>'+narray[e].dblocstart[0]+' - '+narray[e].dblocfinish[0]+'</h5></div>');
             }
-            $.mobile.changePage('#tripPage', null, true, true);
+            loading(false);
+            $.mobile.changePage('#tripPage');
         },
         error: function(data){
             loading(false);
-            console.log('Error Connecting to server');
-        },
-        complete: function(data){
-            loading(false);
+            $.mobile.changePage('#tripPage');
+            errorMessage('Error Connecting to server');
         },
     });
 }
