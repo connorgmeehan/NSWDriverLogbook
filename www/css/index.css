@@ -285,6 +285,7 @@ input{
     width:80%;
     height:50%;
     top:15%;
+    font-size: 0.7em;
     margin:0 auto;
     background-color: #DEDBA7;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.3);
