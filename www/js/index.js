@@ -316,16 +316,15 @@ function bindButtons(){
     $("#register").bind("tap",handleRegister);
     $(".logout").bind("tap", logOut);
     $("#profilesPageButton").bind("tap", function(){
-        $.mobile.changePage('#profilesPage');
+        $.mobile.changePage('#profilesPage', null, true, true); 
         getSupervisors('profilespage');
     });
     $("#vehiclesPageButton").bind("tap",function(){
-        $.mobile.changePage($('#profilesPage'),{allowSamePageTransition:true})
-        $.mobile.changePage('#profilesPage');
+        $.mobile.changePage('#profilesPage', null, true, true); 
         getVehicles('vehiclespage');
     });
     $("#tripPageButton").bind("tap", function(){
-        $.mobile.changePage('#newTripPage');
+        $.mobile.changePage('#newTripPage', null, true, true); 
         getSupervisors('trippage');
         getVehicles('trippage');
     });
@@ -619,6 +618,7 @@ function getTripPage(){
                     '</h4><h6>'+narray[e].dbtimestart+' - '+narray[e].dbtimefinish+
                     '</h6><h5>'+narray[e].dblocstart[0]+' - '+narray[e].dblocfinish[0]+'</h5></div>');
             }
+            $.mobile.changePage('#tripPage', null, true, true);
         },
         error: function(data){
             loading(false);
