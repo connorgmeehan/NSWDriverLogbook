@@ -316,7 +316,7 @@ function bindButtons(){
     $("#register").bind("tap",handleRegister);
     $(".logout").bind("tap", logOut);
     $("#profilesPageButton").bind("tap", function(){
-        $.mobile.changePage('#profilesPage', null, true, true); 
+        
         getSupervisors('profilespage');
     });
     $("#vehiclesPageButton").bind("tap",function(){
@@ -324,7 +324,6 @@ function bindButtons(){
         getVehicles('vehiclespage');
     });
     $("#tripPageButton").bind("tap", function(){
-        $.mobile.changePage('#newTripPage', null, true, true); 
         getSupervisors('trippage');
         getVehicles('trippage');
     });
@@ -513,7 +512,7 @@ function getVehicles(purpose){
                             value: e,
                             text: narray[e].alias,
                         }));
-                    }
+                    } 
                 }
             } else {
                 if(narray == null){
@@ -529,6 +528,7 @@ function getVehicles(purpose){
                         $('#vehiclePageContainer').append(template);
                         console.table(narray);
                     }
+                    $.mobile.changePage('#vehiclesPage', null, true, true); 
                 }
             }
         },
@@ -567,6 +567,7 @@ function getSupervisors(purpose){
                             text: el.alias,
                         }));
                     });
+                     $.mobile.changePage('#newTripPage', null, true, true); 
                 }
             } else {
                 if(narray == null){
@@ -582,6 +583,7 @@ function getSupervisors(purpose){
                         template = "<div id='"+o+"'class='listObject'><h4>"+(o+1)+". "+narray[o].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[o].licensenumber+"</p></div>";
                         $('#profilePageContainer').append(template);
                     }
+                    $.mobile.changePage('#profilesPage', null, true, true); 
                 }   
             }
         
@@ -747,7 +749,7 @@ function initTrip(){
             function waitForGeoLocationInit(){
                 if(currentLocation === undefined){
                     setTimeout( waitForGeoLocationInit,1500);
-                    console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s');
+                    console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s' + doingTutorial);
                     currentLocation = getGeoLocation();
                     
                 } else {
