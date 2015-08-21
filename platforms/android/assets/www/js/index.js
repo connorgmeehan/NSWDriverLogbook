@@ -315,8 +315,14 @@ function bindButtons(){
     $("#login").bind("tap", handleLogin);
     $("#register").bind("tap",handleRegister);
     $(".logout").bind("tap", logOut);
-    $("#profilesPageButton").bind("tap", function(){getSupervisors('profilespage');});
-    $("#vehiclesPageButton").bind("tap",function(){getVehicles('vehiclespage');});
+    $("#profilesPageButton").bind("tap", function(){
+        
+        getSupervisors('profilespage');
+    });
+    $("#vehiclesPageButton").bind("tap",function(){
+        $.mobile.changePage('#profilesPage', null, true, true); 
+        getVehicles('vehiclespage');
+    });
     $("#tripPageButton").bind("tap", function(){
         getSupervisors('trippage');
         getVehicles('trippage');
@@ -506,7 +512,7 @@ function getVehicles(purpose){
                             value: e,
                             text: narray[e].alias,
                         }));
-                    }
+                    } 
                 }
             } else {
                 if(narray == null){
@@ -520,8 +526,9 @@ function getVehicles(purpose){
                     for (var i = 0; i < narray.length; i++) {
                         template = "<div id='"+i+"'class='listObject'><h4>"+(i+1)+". "+narray[i].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[i].licensenumber+"</p></div>";
                         $('#vehiclePageContainer').append(template);
-                        console.log('array: '+narray);
+                        console.table(narray);
                     }
+                    $.mobile.changePage('#vehiclesPage', null, true, true); 
                 }
             }
         },
@@ -529,9 +536,9 @@ function getVehicles(purpose){
             loading(false);
             console.log("error"+data);
         },
-        complete: function(data){
+        /*complete: function(data){
             loading(false);
-        },
+        },*/
         dataType: 'json',
     });
 }
@@ -560,6 +567,7 @@ function getSupervisors(purpose){
                             text: el.alias,
                         }));
                     });
+                     $.mobile.changePage('#newTripPage', null, true, true); 
                 }
             } else {
                 if(narray == null){
@@ -569,12 +577,13 @@ function getSupervisors(purpose){
                         $.mobile.changePage('#bastionPage');
                         tutorial('vehicle');
                     }
-                    console.log('profilepage');
+                    console.log(narray[0].alias);
                     $('#profilePageContainer').html(""); // Clears the page
                     for (var o = 0; o < narray.length; o++) {
                         template = "<div id='"+o+"'class='listObject'><h4>"+(o+1)+". "+narray[o].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[o].licensenumber+"</p></div>";
                         $('#profilePageContainer').append(template);
                     }
+                    $.mobile.changePage('#profilesPage', null, true, true); 
                 }   
             }
         
@@ -583,9 +592,9 @@ function getSupervisors(purpose){
             loading(false);
             console.log("error"+data + profileArray);
         },
-        complete: function(data){
+        /*complete: function(data){
             loading(false);
-        },
+        },*/
         dataType: 'json',
     });
 }
@@ -601,7 +610,7 @@ function getTripPage(){
         type: 'POST',
         success: function(data){
             loading(false);
-            console.log(data);
+            console.table(data);
             var narray = data;
             $('#tripListContainer').html(''); // Clears the page so we dont get repeats
             for(var e = 0; e < narray.length; e++) {
@@ -611,6 +620,7 @@ function getTripPage(){
                     '</h4><h6>'+narray[e].dbtimestart+' - '+narray[e].dbtimefinish+
                     '</h6><h5>'+narray[e].dblocstart[0]+' - '+narray[e].dblocfinish[0]+'</h5></div>');
             }
+            $.mobile.changePage('#tripPage', null, true, true);
         },
         error: function(data){
             loading(false);
@@ -623,6 +633,7 @@ function getTripPage(){
 }
 
 function getTotalHours(){
+    console.log('doingTut:  '+doingTutorial);
     $.ajax({
         url: hosturl+"?action=gettotalhours",
         data: {
@@ -739,8 +750,9 @@ function initTrip(){
             function waitForGeoLocationInit(){
                 if(currentLocation === undefined){
                     setTimeout( waitForGeoLocationInit,1500);
-                    console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s');
+                    console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s' + doingTutorial);
                     currentLocation = getGeoLocation();
+                    
                 } else {
                     loading(false);
                     console.debug(currentLocation);

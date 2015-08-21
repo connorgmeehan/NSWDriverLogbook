@@ -24,7 +24,7 @@
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Driver Logbook NSW</title>
+    <title>Kwik Book</title>
 </head>
 <body>
     <div id='loadingmask'></div>
@@ -42,7 +42,7 @@
     </div>
     <div class="app" data-role="page" id="loginPage">
         <div data-role="header" data-position="fixed" class="navbar">
-            <h2>Driver Logbook NSW</h1>
+            <h2>Kwik Book</h2>
             <div data-role="navbar">
             <ul>
                 <li><a href="#registerPage" data-role="button"><h3>Sign Up</h3></a></li>
@@ -54,7 +54,7 @@
     
         <div data-role="content" class="content" id="content">
             <form id="loginField">
-                <p id='welcomeInfo'> Already have an account?  Log in! <br><br><b><u><a href='#registerPage'>Or create an account at the Sign Up page.</a></u></b></p>
+                <!--<p id='welcomeInfo'> Already have an account?  Log in! <br><br><b><u><a href='#registerPage'>Or create an account at the Sign Up page.</a></u></b></p>-->
                 <input type="text" id="email" placeholder="Email address:" name="username" data-enhance="true">
                 <input type="password" id="password" placeholder="Password" name="password">
                 <div class="centerButtonContainer"><a class="button" id="login">Login</a></div>
@@ -67,7 +67,7 @@
     
     <div class="app" data-role="page" id="registerPage">
         <div data-role="header" data-position="fixed" class="navbar">
-            <h2>Driver Logbook NSW</h1>
+            <h2>Kwik Book</h1>
     
             <div data-role="navbar">
             <ul>
@@ -96,7 +96,7 @@
     
     <div class="app" data-role="page" id="forgotPage">
         <div data-role="header" data-position="fixed" class="navbar">
-            <h2>Driver Logbook NSW</h1>
+            <h2>Kwik Book</h1>
     
             <div data-role="navbar">
             <ul>
@@ -126,10 +126,10 @@
         <div data-role="content" class="content">
                 <div class="menuContainer">
                     <div id="hourDisp"><p id="hourText">Loading Hours</p></div>
-                    <div class="centerButtonContainer"><a href="#newTripPage" id="tripPageButton" class="bigbutton">Start Trip</a></div>
-                    <div class="centerButtonContainer"><a href="#pastTripsPage" id="getTripPage" class="bigbutton">Past Trips</a></div>
-                    <div class="inlineButtonContainer" style="float:left"><a class="button" id="profilesPageButton" href="#profilesPage"><h3>Profiles</h3></a></div>
-                    <div class="inlineButtonContainer" style="float:right"><a class="button" id="vehiclesPageButton" href="#vehiclesPage"><h3>Vehicles</h3></a></div>
+                    <div class="centerButtonContainer"><a id="tripPageButton" class="bigbutton">Start Trip</a></div>
+                    <div class="centerButtonContainer"><a id="getTripPage" class="bigbutton">Past Trips</a></div>
+                    <div class="inlineButtonContainer" style="float:left"><a class="button" id="profilesPageButton"><h3>Profiles</h3></a></div>
+                    <div class="inlineButtonContainer" style="float:right"><a class="button" id="vehiclesPageButton"><h3>Vehicles</h3></a></div>
                 </div>
             </div>
         </div>
