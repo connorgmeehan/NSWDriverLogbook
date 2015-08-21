@@ -316,11 +316,9 @@ function bindButtons(){
     $("#register").bind("tap",handleRegister);
     $(".logout").bind("tap", logOut);
     $("#profilesPageButton").bind("tap", function(){
-        
         getSupervisors('profilespage');
     });
     $("#vehiclesPageButton").bind("tap",function(){
-        $.mobile.changePage('#profilesPage', null, true, true); 
         getVehicles('vehiclespage');
     });
     $("#tripPageButton").bind("tap", function(){
