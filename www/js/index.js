@@ -316,17 +316,22 @@ function bindButtons(){
     $("#register").bind("tap",handleRegister);
     $(".logout").bind("tap", logOut);
     $("#profilesPageButton").bind("tap", function(){
+        $.mobile.changePage('#profilesPage');
         getSupervisors('profilespage');
     });
     $("#vehiclesPageButton").bind("tap",function(){
+        $.mobile.changePage($('#profilesPage'),{allowSamePageTransition:true})
+        $.mobile.changePage('#profilesPage');
         getVehicles('vehiclespage');
     });
     $("#tripPageButton").bind("tap", function(){
+        $.mobile.changePage('#newTripPage');
         getSupervisors('trippage');
         getVehicles('trippage');
     });
     $("#getTripPage").bind("tap", function(){
-        getTripPage;
+        $.mobile.changePage('#pastTripsPage');
+        getTripPage();
     });
     $("#newVehicle").bind("tap", function(){
         $('#newVehiclePopup').slideDown();
@@ -512,7 +517,7 @@ function getVehicles(purpose){
                             value: e,
                             text: narray[e].alias,
                         }));
-                    } 
+                    }
                 }
             } else {
                 if(narray == null){
@@ -528,7 +533,6 @@ function getVehicles(purpose){
                         $('#vehiclePageContainer').append(template);
                         console.table(narray);
                     }
-                    $.mobile.changePage('#vehiclesPage', null, true, true); 
                 }
             }
         },
@@ -536,6 +540,9 @@ function getVehicles(purpose){
             loading(false);
             console.log("error"+data);
         },
+        /*complete: function(data){
+            loading(false);
+        },*/
         dataType: 'json',
     });
 }
@@ -564,7 +571,6 @@ function getSupervisors(purpose){
                             text: el.alias,
                         }));
                     });
-                     $.mobile.changePage('#newTripPage', null, true, true); 
                 }
             } else {
                 if(narray == null){
@@ -580,7 +586,6 @@ function getSupervisors(purpose){
                         template = "<div id='"+o+"'class='listObject'><h4>"+(o+1)+". "+narray[o].alias+"<br>"+/*"</h4><button class='popupCloseButton'>X</button><br><p>"+*/narray[o].licensenumber+"</p></div>";
                         $('#profilePageContainer').append(template);
                     }
-                    $.mobile.changePage('#profilesPage', null, true, true); 
                 }   
             }
         
@@ -606,6 +611,7 @@ function getTripPage(){
         },
         type: 'POST',
         success: function(data){
+            loading(false);
             console.table(data);
             var narray = data;
             $('#tripListContainer').html(''); // Clears the page so we dont get repeats
@@ -616,19 +622,18 @@ function getTripPage(){
                     '</h4><h6>'+narray[e].dbtimestart+' - '+narray[e].dbtimefinish+
                     '</h6><h5>'+narray[e].dblocstart[0]+' - '+narray[e].dblocfinish[0]+'</h5></div>');
             }
-            loading(false);
-            $.mobile.changePage('#tripPage');
         },
         error: function(data){
             loading(false);
-            $.mobile.changePage('#tripPage');
-            errorMessage('Error Connecting to server');
+            console.log('Error Connecting to server');
+        },
+        complete: function(data){
+            loading(false);
         },
     });
 }
 
 function getTotalHours(){
-    console.log('doingTut:  '+doingTutorial);
     $.ajax({
         url: hosturl+"?action=gettotalhours",
         data: {
@@ -745,7 +750,7 @@ function initTrip(){
             function waitForGeoLocationInit(){
                 if(currentLocation === undefined){
                     setTimeout( waitForGeoLocationInit,1500);
-                    console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s' + doingTutorial);
+                    console.log('currentLocation is '+currentLocation+' so im going to wait 1.5s');
                     currentLocation = getGeoLocation();
                     
                 } else {

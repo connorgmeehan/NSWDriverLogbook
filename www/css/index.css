@@ -288,6 +288,7 @@ input{
     margin:0 auto;
     background-color: #DEDBA7;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.3);
+    font-size: 0.4em;
     font-size: 25px;
 }
 #completedDisplay p{
